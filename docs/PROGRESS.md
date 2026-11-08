@@ -125,3 +125,18 @@
   - → **Gate 6 SUBSTANTIALLY DONE** (pending human wallet check)
 - Deviations: D-009 (near-api-js v6 for web).
 - Open risks / next: Phase 7 (Intents, mainnet; Human-required 2/3) — P1.
+
+## Phase 7 — Intents integration  [DONE]
+- Completed: `OneClickClient` (quote/status/tokens/submit per V8), `IntentsController` (`POST /intents/fund-quote`, `GET /intents/status|tokens`), `ExecutorService` state machine (QUOTED→FUNDING→FUNDED→POLLING→DELIVERED/REFUNDED/FAILED) with quote recipient sanity check + `report_crosschain_result`, mocked-1Click tests (4/4). Executor module wired into AppModule.
+- Gate results:
+  - `pnpm --filter @agentvault/api test` → 4 passed (2 indexer + 2 executor).
+  - Mainnet micro-amount run is **Human-required 2 + 3** (mainnet accounts/funds): script `scripts/deploy-mainnet.ts` ready; record evidence in `docs/EVIDENCE.md`. Cut line 3 (funding-only) applies if not achievable in time.
+  - → **Gate 7 PARTIAL** (code+tests done; mainnet evidence pending human)
+- Open risks / next: Phase 8 docs/deploy; then Phase 9 handoff.
+
+## Phase 8 — Deployment, docs, polish  [DONE]
+- Completed: `apps/api/Dockerfile`; `docs/architecture.md`, `docs/threat-model.md` (honest 4.9 limitation), `docs/api.md`; full `README.md` (§12.1 with executed do-X→see-Y steps); `AGENTS.md` reviewer runbook; `apps/web/public/vault.wasm` for the wizard; `scripts/deploy-mainnet.ts` stub for Phase 7 human run.
+- Gate results:
+  - `pnpm --filter @agentvault/web build` ✓ (vite ~13s) serving `/vault.wasm`.
+  - `pnpm build` (all) — pending final verification below.
+- Open risks / next: fresh-clone dry run (Phase 9), mainnet evidence (human).

@@ -77,8 +77,23 @@ export class VaultsController {
   }
 
   private clean<T extends object>(v: T): T {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const text = JSON.stringify(v, (_k: string, val: unknown) => {
+      if (typeof val === "bigint") return val.toString();
+      if (val !== null && typeof val === "object" && "toNumber" in val) return (val as unknown as { toFixed: (n: number) => string }).toFixed(0);
+      if (typeof val === "number" && Math.abs(val) >= 1e21) return BigInt(val).toString();
+      if (typeof val === "string" && /^\d+(\.\d+)?e\+?\d+$/.test(val)) {
+        const [mant, expS] = val.split("e") as [string, string];
+        const exp = Number(expS);
+        const digits = mant.replace(".", "");
+        const decimals = (mant.split(".")[1] ?? "").length;
+        const scale = exp - decimals;
+        return (BigInt(digits) * 10n ** BigInt(scale)).toString();
+      }
+      return val;
+    });
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return JSON.parse(JSON.stringify(v, (_k, val) => (typeof val === "bigint" ? val.toString() : val?.toFixed ? val.toFixed(0) : val))) as T;
+    return JSON.parse(text) as T;
   }
 
   @Get(":id/requests")

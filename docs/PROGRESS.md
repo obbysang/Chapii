@@ -103,3 +103,9 @@
   - → **Gate 5 PASSED**
 - Deviations: none new (D-004 port 5434 in DATABASE_URL examples; api tsconfig switched to commonjs for Nest runtime).
 - Open risks / next: Phase 6 web app. Needs wallet selector + wizard + SSE feed + approvals/security pages (P1).
+
+## Phase 5 — Database and API  [DONE]
+- Completed: NestJS API + Prisma schema (spec §7 exact) + indexer (get_changes_since 2.5s poll, idempotent upserts, backoff→degraded, SSE), endpoints `/health`, `POST /vaults`, `GET /vaults`, `summary`, `agents`, `requests` (cursor pagination), `requests/:id`, `stream` SSE; helmet/CORS/zod; jest tests (idempotency + SSE) 2/2.
+- Gate results: `/health` ok; register+index avfinal.testnet; requests API returns exact yocto amounts (Decimal-safe serialization, e.g. `"amount":"2500000000000000000000000"`); SSE emitted `connected`, `request.created` (id 95 APPROVED, 96 COMPLETED, 97 REJECTED) live during `pnpm agent:good`. API tests green.
+- → **Gate 5 PASSED**
+- Open risks / next: Phase 6 web app. Amount format fixed in clean() serializer.

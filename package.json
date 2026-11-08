@@ -13,5 +13,12 @@
     "agent:attack": "pnpm --filter @agentvault/demo-agent start:attacker",
     "agent:llm": "pnpm --filter @agentvault/demo-agent start:llm"
   },
-  "packageManager": "pnpm@11.1.2"
+  "packageManager": "pnpm@11.1.2",
+  "devDependencies": {
+    "@eslint/js": "^9.18.0",
+    "eslint": "^9.18.0",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.72.1"
+  },
+  "type": "module"
 }

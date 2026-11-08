@@ -23,7 +23,7 @@ export function Requests() {
 
   useEffect(() => {
     void load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  
   }, [vaultId, status]);
 
   if (!vaultId) return <Empty title="Pick a vault" />;

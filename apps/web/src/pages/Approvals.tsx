@@ -83,7 +83,7 @@ export function Security() {
         }
       };
       void poll();
-    } catch (e) {
+    } catch {
       setProgress("Harness unavailable on this deployment. Run `pnpm harness --network testnet` locally.");
     }
   }

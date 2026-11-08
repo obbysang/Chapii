@@ -1,4 +1,4 @@
-import { OwnerClient, AgentVaultClient } from "@agentvault/sdk";
+import { OwnerClient } from "@agentvault/sdk";
 import { KeyPair } from "near-api-js";
 import fs from "node:fs";
 const VAULT = "avfinal.testnet";

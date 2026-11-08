@@ -37,7 +37,7 @@ export function Feed({ vaultId }: { vaultId: string }) {
       unsub();
       clearInterval(t);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  
   }, [vaultId]);
 
   if (error) return <ErrorState message={error} retry={load} />;

@@ -90,3 +90,16 @@
 - Deviations: D-008 (testnet storage-floor funding mechanics; L7 testnet-skip with unit coverage; R1 cross-chain-parked variant so rate tests never move funds).
 - [VERIFY] items resolved: none new.
 - Open risks / next: Phase 5 API+indexer. Postgres up on 5434 locally; Prisma schema per spec §7 next.
+
+## Phase 5 — Database and API  [DONE]
+- Completed:
+  - `apps/api` (NestJS): Prisma schema exactly per spec §7 (+ migration `20261108213223_init`), `PrismaService`, `ChainClient`, `EventsService` (SSE), `IndexerService` (poll `get_changes_since` 2.5s, idempotent upserts, backoff, `degraded` health, SSE emission), `HealthController` + `VaultsController` (P0 endpoints: `/health`, `POST /vaults`, `/vaults?owner=`, `summary`, `agents`, `requests` w/ cursor pagination, `requests/:id`, `stream` SSE, `get_storage_info` in summary).
+  - helmet, CORS from `CORS_ORIGINS`, zod on register input, no secrets in logs.
+  - Tests: `indexer.spec.ts` (idempotency + SSE emission) — 2 passing.
+- Gate results:
+  - `pnpm --filter @agentvault/api test` → 2 passed. `pnpm build` → ok (excludes specs).
+  - Live: `/health` → `{"ok":true,"chain":"ok","db":"ok","indexerLagMs":0}`; `POST /vaults {avfinal.testnet}` → registered; indexer backfilled history; `GET /vaults/:id/requests` → rows incl. `{"onchainId":"46","status":"COMPLETED",...}`; summary approved=12 rejected=31 spent=5.9 NEAR.
+  - SSE: `GET /vaults/:id/stream` emitted `connected` then live `request.created` (id 95 APPROVED, 96 COMPLETED) after `pnpm agent:good` activity; rejected row (id 97 REJECTED) also streamed.
+  - → **Gate 5 PASSED**
+- Deviations: none new (D-004 port 5434 in DATABASE_URL examples; api tsconfig switched to commonjs for Nest runtime).
+- Open risks / next: Phase 6 web app. Needs wallet selector + wizard + SSE feed + approvals/security pages (P1).

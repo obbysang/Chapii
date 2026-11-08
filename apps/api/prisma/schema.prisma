@@ -1,0 +1,196 @@
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+}
+
+enum Network {
+  testnet
+  mainnet
+}
+
+enum AgentStatus {
+  ACTIVE
+  FROZEN
+  REVOKED
+}
+
+enum RequestStatus {
+  REJECTED
+  PENDING_APPROVAL
+  APPROVED
+  AWAITING_EXECUTION
+  EXECUTING
+  COMPLETED
+  FAILED
+  REJECTED_BY_OWNER
+  EXPIRED
+}
+
+enum JobState {
+  QUEUED
+  QUOTING
+  QUOTED
+  FUNDING
+  FUNDED
+  POLLING
+  DELIVERED
+  REFUNDED
+  FAILED
+}
+
+enum Verification {
+  UNVERIFIED
+  OK
+  MISMATCH
+}
+
+enum HarnessStatus {
+  QUEUED
+  RUNNING
+  DONE
+  ERROR
+}
+
+model Vault {
+  id               String   @id
+  network          Network
+  ownerAccountId   String
+  label            String?
+  cursorSeq        BigInt   @default(0)
+  health           String   @default("ok")
+  createdAt        DateTime @default(now())
+  agents           Agent[]
+  requests         PaymentRequest[]
+  events           ChainEvent[]
+  harnessRuns      HarnessRun[]
+  @@index([ownerAccountId])
+}
+
+model Agent {
+  id            String   @id @default(cuid())
+  vaultId       String
+  publicKey     String
+  name          String
+  status        AgentStatus
+  policyJson    Json
+  violations    Int      @default(0)
+  createdAt     DateTime
+  updatedAt     DateTime @updatedAt
+  vault         Vault    @relation(fields: [vaultId], references: [id], onDelete: Cascade)
+  requests      PaymentRequest[]
+  @@unique([vaultId, publicKey])
+}
+
+model PaymentRequest {
+  id              String   @id @default(cuid())
+  vaultId         String
+  onchainId       BigInt
+  agentPublicKey  String
+  agentId         String?
+  clientRef       String
+  asset           String
+  amount          Decimal  @db.Decimal(40, 0)
+  chain           String
+  address         String
+  destAsset       String?
+  memo            String?
+  status          RequestStatus
+  reason          String?
+  depositAddress  String?
+  settlementRef   String?
+  lastChangeSeq   BigInt
+  createdAt       DateTime
+  decidedAt       DateTime?
+  indexedAt       DateTime @default(now())
+  vault           Vault    @relation(fields: [vaultId], references: [id], onDelete: Cascade)
+  agent           Agent?   @relation(fields: [agentId], references: [id])
+  job             CrosschainJob?
+  @@unique([vaultId, onchainId])
+  @@index([vaultId, status])
+  @@index([vaultId, createdAt])
+  @@index([vaultId, agentPublicKey])
+}
+
+model CrosschainJob {
+  id             String   @id @default(cuid())
+  requestId      String   @unique
+  state          JobState @default(QUEUED)
+  quoteJson      Json?
+  depositAddress String?
+  fundTxHash     String?
+  statusJson     Json?
+  verification   Verification @default(UNVERIFIED)
+  attempts       Int      @default(0)
+  lastError      String?
+  nextRunAt      DateTime @default(now())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  request        PaymentRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  @@index([state, nextRunAt])
+}
+
+model ChainEvent {
+  id         String   @id @default(cuid())
+  vaultId    String
+  type       String
+  dataJson   Json
+  txHash     String?
+  receiptId  String?
+  blockHeight BigInt?
+  ts         DateTime
+  vault      Vault    @relation(fields: [vaultId], references: [id], onDelete: Cascade)
+  @@index([vaultId, ts])
+}
+
+model HarnessRun {
+  id         String   @id @default(cuid())
+  vaultId    String
+  status     HarnessStatus @default(QUEUED)
+  total      Int      @default(0)
+  passed     Int      @default(0)
+  startedAt  DateTime?
+  finishedAt DateTime?
+  summaryJson Json?
+  requesterIp String?
+  createdAt  DateTime @default(now())
+  vault      Vault    @relation(fields: [vaultId], references: [id], onDelete: Cascade)
+  results    HarnessResult[]
+}
+
+model HarnessResult {
+  id          String   @id @default(cuid())
+  runId       String
+  scenarioId  String
+  category    String
+  title       String
+  expected    String
+  actual      String
+  passed      Boolean
+  txHash      String?
+  invariantsOk Boolean
+  notes       String?
+  durationMs  Int
+  run         HarnessRun @relation(fields: [runId], references: [id], onDelete: Cascade)
+  @@index([runId])
+}
+
+model Notification {
+  id          String   @id @default(cuid())
+  accountId   String
+  vaultId     String?
+  kind        String
+  payload     Json
+  readAt      DateTime?
+  deliveredAt DateTime?
+  createdAt   DateTime @default(now())
+  @@index([accountId, readAt])
+}
+
+model AuthChallenge {
+  nonce     String   @id
+  accountId String
+  expiresAt DateTime
+}

@@ -1,8 +1,11 @@
 import { Link } from "react-router-dom";
+import TopNav from "../components/TopNav";
 import { DEMO_VAULT, NETWORK } from "../lib/api";
 
 export default function Landing() {
   return (
+    <>
+    <TopNav />
     <div className="relative overflow-hidden">
       <div className="mx-auto max-w-4xl text-center">
         <h1 className="display text-5xl leading-[1.05] md:text-7xl">
@@ -73,5 +76,6 @@ export default function Landing() {
         Network: {NETWORK}. Demo vault {DEMO_VAULT} is public and read-only; owner actions need the owner wallet.
       </p>
     </div>
+    </>
   );
 }

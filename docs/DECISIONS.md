@@ -21,3 +21,7 @@
 - V12 (global contracts): Available — near-sdk 5.30 has `deploy_global_contract(_by_account_id)` / `use_global_contract` (Promise methods + `near-global-contracts`). P1 only per spec; fallback plain DeployContract ships first.
 - V13 (Shade/TEE): TEE/off-chain compute documented (docs.near.org/primitives/off-chain-compute, NEAR AI Cloud https://docs.near.ai). P2: skip; keep honest limitation (spec 4.9) in README/threat-model.
 - V14 (hackathon compliance): See HACKATHON_NOTES.md. No conflicts beyond D-001/D-002/D-003.
+
+- D-004: Local Postgres host port 5434 (5432 occupied by unrelated local container). DATABASE_URL examples updated.
+- D-005: Spec §4.5 says violations increment for "steps 3–10" but also "(Step 2 and 3 don't count…)". Implemented: steps 4-10 increment; steps 2/3 and 11 never do.
+- D-006: near-workspaces 5.0.0 SandboxWorker `devDeploy` fails (BigInt serialize) in this env after manual binary install; Phase 2 key-restriction evidence substituted with the Phase 0 real-testnet experiment (5/5) + unit tests. Sandbox test kept in repo for CI.

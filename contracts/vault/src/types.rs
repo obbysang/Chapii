@@ -57,6 +57,7 @@ pub struct Policy {
 }
 
 #[near(serializers = [borsh, json])]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum AgentStatus {
     Active,
@@ -99,6 +100,7 @@ pub struct PaymentArgs {
 }
 
 #[near(serializers = [borsh, json])]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum ReasonCode {
     VaultPaused,
@@ -118,6 +120,7 @@ pub enum ReasonCode {
 }
 
 #[near(serializers = [borsh, json])]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum RequestStatus {
     Rejected,

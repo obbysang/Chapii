@@ -60,3 +60,19 @@
 - Deviations: D-005 (violation steps), D-006 (sandbox blocked, testnet experiment substituted).
 - [VERIFY] items resolved: V2-V4 confirmed experimentally; V1/V12 suffice (Promise APIs compiling).
 - Open risks / next: Phase 3 SDK. Need testnet keys via .env for Gate 3 script (created fresh faucet account `agentvault-hk1.testnet` + vault `avvault-hk1.testnet` ready).
+
+## Phase 3 — Shared package and SDK  [DONE]
+- Completed:
+  - `packages/shared`: TS types/zod mirroring contract (§5.1): `ReasonCode` (14 codes), `REASON_MESSAGES` (message+hint for all codes), `policySchema`, `paymentArgsSchema`, `Decision` union; vitest coverage (message mapping + input validation).
+  - `packages/sdk`: `AgentVaultClient` (signs as vault account with agent key; `requestPayment` waits final outcome, decodes `Decision` from tx `SuccessValue`, maps reason→message/hint, protocol failures → `TX_ERROR`), `OwnerClient` (createVault/addAgent/updatePolicy/freeze/unfreeze/revoke/pause/unpause/approve/reject/setExecutor). Uses `@near-js/accounts|providers|signers` 2.5.1 + `near-api-js` 7.4.0 (`parseNearAmount` only).
+  - Fixed protocol adaptations (D-007): single-struct-arg methods need `{"args": {...}}` wrapper; views via `provider.callFunction()`; `KeyPair.fromString` accepts bare base58.
+  - Contract fix found during Gate 3: `ReasonCode`/`RequestStatus`/`AgentStatus` now `SCREAMING_SNAKE_CASE` in JSON (spec §4.2); redeployed to `avvault-hk1.testnet` (redeploy tx 3CFtgunyCanrDdpgHqYupFDrZAMMBM231h9doGWH763M) + vault top-up.
+- Gate results:
+  - Gate 3 script (`packages/sdk/scripts/gate3.ts`) on testnet — output:
+    - `APPROVED case: {"decision":"APPROVED","requestId":10,"txHash":"D5fYBNNw9Sk2d7SM7uehQu43USLzJxJeeYmsZJxqiMgk"}` + `terminal status: COMPLETED`
+    - `REJECTED case: {"decision":"REJECTED","requestId":11,"reason":"PAYEE_NOT_ALLOWED","message":"Recipient is not on this agent's allowlist","hint":"Do not retry. Ask the owner to allowlist the payee","txHash":"FYD31dFNQfe5KmxRm6PbeAodnVcJFA995v9kSQaZix3p"}`
+  - `pnpm --filter @agentvault/shared test` ✓, `sdk typecheck+build` ✓
+  - → **Gate 3 PASSED**
+- Deviations: D-007 (near-sdk 5.30 single-arg wrapper + SDK view API).
+- [VERIFY] items resolved: none new.
+- Open risks / next: Phase 4 harness/MCP/demo-agents. Harness will reuse owner `agentvault-hk1.testnet` + vault `avvault-hk1.testnet` on testnet.

@@ -19,7 +19,9 @@
     "near-api-js": "^7.4.0"
   },
   "devDependencies": {
+    "@near-js/crypto": "2.5.1",
     "eslint": "^9.18.0",
+    "tsx": "^4.23.15",
     "typescript": "^5.7.2",
     "vitest": "^3.0.1"
   }

@@ -197,9 +197,15 @@ importers:
         specifier: ^7.4.0
         version: 7.4.0
     devDependencies:
+      '@near-js/crypto':
+        specifier: 2.5.1
+        version: 2.5.1(@near-js/types@2.5.1)(@near-js/utils@2.5.1(@near-js/types@2.5.1))
       eslint:
         specifier: ^9.18.0
         version: 9.39.5(jiti@2.7.0)
+      tsx:
+        specifier: ^4.23.15
+        version: 4.23.15
       typescript:
         specifier: ^5.7.2
         version: 5.9.3

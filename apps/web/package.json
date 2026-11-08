@@ -13,9 +13,11 @@
   },
   "dependencies": {
     "@agentvault/shared": "workspace:*",
+    "clsx": "^2.1.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.28.0"
+    "react-router-dom": "^6.28.0",
+    "tailwind-merge": "^3.7.0"
   },
   "devDependencies": {
     "@near-wallet-selector/core": "10.1.4",
@@ -29,6 +31,7 @@
     "buffer": "^6.0.3",
     "eslint": "^9.18.0",
     "jsdom": "^31.0.0",
+    "lucide-react": "0.460.0",
     "near-api-js": "6.2.0",
     "tailwindcss": "^4.3.5",
     "typescript": "^5.7.2",

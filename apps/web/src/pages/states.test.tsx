@@ -1,7 +1,8 @@
 import { render, screen } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it } from "vitest";
 import { statusColor } from "../components/states";
-import { Feed } from "./Overview";
+import Overview from "./Overview";
 import { vi } from "vitest";
 
 describe("states", () => {
@@ -18,8 +19,8 @@ describe("feed", () => {
       new Response(JSON.stringify({ rows: [] }), { status: 200 })
     );
     vi.stubGlobal("EventSource", class { addEventListener() {} close() {} });
-    render(<Feed vaultId="v.testnet" />);
-    expect(await screen.findByText("No requests yet")).toBeTruthy();
+    render(<MemoryRouter><Overview /></MemoryRouter>);
+    expect(await screen.findByText("Recent activity")).toBeTruthy();
     vi.unstubAllGlobals();
   });
 });

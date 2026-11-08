@@ -55,13 +55,18 @@ export default function Landing() {
           ["2 · Contract policy", "Allowlist, caps, rate limits, co-sign — evaluated on-chain, then approved or rejected with a reason"],
           ["3 · Circuit breaker", "Repeated violations auto-freeze the agent in the same contract call"],
           ["4 · Owner controls", "One-click freeze/revoke; chain is the source of truth"],
-        ].map(([t, d], i) => (
+        ].map(entry => {
+          const t = entry[0] ?? "";
+          const d = entry[1] ?? "";
+          const i = Number(t.slice(0, 1));
+          return (
           <div key={t} className="rounded-2xl border border-[var(--line)] bg-white p-6">
             <p className="display text-2xl">{i + 1}</p>
-            <p className="mt-2 font-medium">{t.split(" · ")[1]}</p>
+            <p className="mt-2 font-medium">{t.replace(/^[0-9] · /, "")}</p>
             <p className="mt-2 text-sm text-[var(--muted)]">{d}</p>
           </div>
-        ))}
+          );
+        })}
       </div>
 
       <p className="mt-10 text-xs text-[var(--muted)]">

@@ -1,0 +1,17 @@
+{
+  "name": "agentvault",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck",
+    "demo": "pnpm --filter @agentvault/demo-agent start:good",
+    "harness": "pnpm --filter @agentvault/harness start",
+    "agent:good": "pnpm --filter @agentvault/demo-agent start:good",
+    "agent:attack": "pnpm --filter @agentvault/demo-agent start:attacker",
+    "agent:llm": "pnpm --filter @agentvault/demo-agent start:llm"
+  },
+  "packageManager": "pnpm@11.1.2"
+}

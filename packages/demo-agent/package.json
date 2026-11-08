@@ -1,0 +1,30 @@
+{
+  "name": "@agentvault/demo-agent",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "agentvault-agent-good": "./dist/scripted-good.js",
+    "agentvault-agent-attacker": "./dist/scripted-attacker.js",
+    "agentvault-agent-llm": "./dist/llm-agent.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "start:good": "tsx src/scripted-good.ts",
+    "start:attacker": "tsx src/scripted-attacker.ts",
+    "start:llm": "tsx src/llm-agent.ts"
+  },
+  "dependencies": {
+    "@agentvault/sdk": "workspace:*",
+    "@agentvault/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "eslint": "^9.18.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^3.0.1"
+  }
+}

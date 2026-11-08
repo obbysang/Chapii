@@ -1,0 +1,10 @@
+node_modules/
+dist/
+target/
+.env
+.env.local
+coverage/
+*.log
+.near-credentials/
+harness-report.json
+*.wasm

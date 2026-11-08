@@ -1,0 +1,26 @@
+{
+  "name": "@agentvault/mcp-server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "agentvault-mcp": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@agentvault/sdk": "workspace:*",
+    "@agentvault/shared": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.16.1"
+  },
+  "devDependencies": {
+    "eslint": "^9.18.0",
+    "typescript": "^5.7.2",
+    "vitest": "^3.0.1"
+  }
+}

@@ -5,17 +5,17 @@ export default function Demo() {
   const navigate = useNavigate();
   return (
     <div>
-      <h1 className="text-2xl font-semibold">Live demo</h1>
-      <p className="mt-2 max-w-2xl text-[#98a2b3]">
+      <h1 className="display text-4xl">Live demo</h1>
+      <p className="mt-3 max-w-2xl text-[var(--muted)]">
         Read-only public vault {DEMO_VAULT} on testnet with real activity. No wallet needed. The feed shows green
         (approved) and red (blocked) rows from the red-team harness.
       </p>
       <div className="mt-4 flex flex-wrap gap-3">
-        <Link className="rounded bg-[#3fb68b] px-5 py-3 font-medium text-black" to={`/v/${DEMO_VAULT}`}>
+        <Link className="pill" to={`/v/${DEMO_VAULT}`}>
           Open the dashboard
         </Link>
         <button
-          className="rounded border border-[#262c38] px-5 py-3"
+          className="pill"
           onClick={() => navigate(`/v/${DEMO_VAULT}/security`)}
         >
           Run attack suite

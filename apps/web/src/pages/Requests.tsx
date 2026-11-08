@@ -32,7 +32,7 @@ export function Requests() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold">Requests</h1>
+      <h1 className="display text-2xl">Requests</h1>
       <div className="mt-3 flex gap-2">
         {["", "COMPLETED", "REJECTED", "PENDING_APPROVAL", "FAILED", "AWITING_EXECUTION"].map((s) => (
           <button key={s} className={`rounded border px-3 py-1 text-sm ${status === s ? "border-[#3fb68b]" : "border-[#262c38]"}`} onClick={() => setStatus(s)}>
@@ -70,7 +70,7 @@ export function RequestDetail() {
   if (!row) return <Loading />;
   return (
     <div>
-      <h1 className="text-2xl font-semibold">Request #{requestId}</h1>
+      <h1 className="display text-2xl">Request #{requestId}</h1>
       <dl className="mt-4 grid gap-3 text-sm md:grid-cols-2">
         {[["Status", r("status")], ["Reason", r("reason")], ["Amount", `${humanAmount(String(r("amount")))} ${String(r("asset"))}`], ["Payee", r("address")], ["Chain", r("chain")], ["Memo (untrusted)", r("memo")]].map(([k, v]) => (
           <div key={k} className="rounded border border-[#262c38] bg-[#151920] p-3">

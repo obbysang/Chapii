@@ -1,21 +1,29 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #0c0e12;
-  --panel: #151920;
-  --line: #262c38;
-  --text: #e8ebf0;
-  --muted: #98a2b3;
-  --green: #3fb68b;
-  --amber: #e8b26a;
-  --red: #e26a6a;
-  --blue: #6aa5e2;
+  --ink: #111827;
+  --paper: #f9fafb;
+  --panel: #ffffff;
+  --line: #e5e7eb;
+  --muted: #6b7280;
+  --red: #ef4444;
+  --green: #16a34a;
+  --amber: #d97706;
 }
 
-body { background: var(--bg); color: var(--text); font-family: ui-sans-serif, system-ui, sans-serif; }
+body { background: var(--paper); color: var(--ink); font-family: ui-sans-serif, system-ui, sans-serif; }
 a { color: inherit; }
 button { min-height: 2.5rem; }
-:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
-.chip { display: inline-flex; align-items: center; gap: 0.35rem; border: 1px solid var(--line); border-radius: 999px; padding: 0.15rem 0.7rem; font-size: 0.75rem; }
+:focus-visible { outline: 2px solid #111827; outline-offset: 2px; }
+.display { font-family: Georgia, "Times New Roman", serif; letter-spacing: -0.02em; }
+.pill { display: inline-flex; align-items: center; gap: 0.5rem; border: 1px solid var(--ink); border-radius: 999px; padding: 0.9rem 1.6rem; font-weight: 500; line-height: 1; transition: all .2s; }
+.pill:hover { background: var(--ink); color: #fff; }
+.pill:hover .pill-arrow { transform: rotate(45deg); }
+.pill-arrow { transition: transform .2s; }
+.chip { display: inline-flex; align-items: center; gap: 0.35rem; border: 1px solid var(--line); border-radius: 999px; padding: 0.15rem 0.7rem; font-size: 0.75rem; background: var(--panel); }
 .row-mono { font-family: ui-monospace, monospace; font-size: 0.85rem; }
 pre { white-space: pre-wrap; word-break: break-word; }
+.spin { width: 160px; height: 160px; border-radius: 999px; display: grid; place-items: center; }
+.spin-badge { position: relative; }
+.spin-ring { animation: spin 14s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }

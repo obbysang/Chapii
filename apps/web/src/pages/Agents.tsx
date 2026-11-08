@@ -46,10 +46,10 @@ export default function Agents() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold">Agents</h1>
+      <h1 className="display text-2xl">Agents</h1>
       <ul className="mt-4 space-y-3">
         {agents.map(([pk, a]) => (
-          <li key={pk} className="rounded-lg border border-[#262c38] bg-[#151920] p-4">
+          <li key={pk} className="rounded-2xl border bg-white p-5">
             <div className="flex flex-wrap items-center gap-3">
               <span className="font-medium">{a.name}</span>
               <span className="chip" style={{ color: a.status === "Active" ? "var(--green)" : a.status === "Frozen" ? "var(--amber)" : "#6b7280" }}>

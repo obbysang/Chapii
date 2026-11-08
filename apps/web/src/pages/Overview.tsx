@@ -56,7 +56,7 @@ export function Feed({ vaultId }: { vaultId: string }) {
               <span className="chip" style={{ color: statusColor(r.status) }}>● {r.status}</span>
               <span className="font-medium">{humanAmount(r.amount)} {r.asset}</span>
               <span className="row-mono text-[#98a2b3]">→ {r.address.length > 20 ? `${r.address.slice(0, 10)}…${r.address.slice(-6)}` : r.address}</span>
-              <span className="text-xs text-[#98a2b3]">{r.clientRef}</span>
+              <span className="text-xs text-[var(--muted)]">{r.clientRef}</span>
               {r.reason ? (
                 <span className="text-xs text-[#e26a6a]" title={(REASON_MESSAGES as Record<string, { message: string }>)[r.reason]?.message}>
                   {r.reason}
@@ -93,16 +93,16 @@ export default function Overview() {
   ];
   return (
     <div>
-      <h1 className="text-2xl font-semibold">Overview <span className="row-mono text-sm text-[#98a2b3]">{vaultId}</span></h1>
+      <h1 className="display text-2xl">Overview <span className="row-mono text-sm text-[#98a2b3]">{vaultId}</span></h1>
       <div className="mt-4 grid gap-3 md:grid-cols-4">
         {cards.map(([k, v, c]) => (
-          <div key={k} className="rounded-lg border border-[#262c38] bg-[#151920] p-4">
-            <p className="text-xs text-[#98a2b3]">{k}</p>
+          <div key={k} className="rounded-2xl border bg-white p-5">
+            <p className="text-xs text-[var(--muted)]">{k}</p>
             <p className="text-xl" style={{ color: c }}>{v}</p>
           </div>
         ))}
       </div>
-      <h2 className="mt-8 text-lg font-semibold">Live feed</h2>
+      <h2 className="display mt-8 text-2xl">Live feed</h2>
       <Feed vaultId={vaultId} />
     </div>
   );

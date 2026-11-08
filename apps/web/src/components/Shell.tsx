@@ -2,7 +2,6 @@ import { Link, NavLink, Outlet } from "react-router-dom";
 import { NETWORK } from "../lib/api";
 import { useWallet } from "../lib/wallet";
 import { useEffect, useState } from "react";
-import { api } from "../lib/api";
 
 function VaultStatusChip({ vaultId }: { vaultId: string }) {
   const [paused, setPaused] = useState<boolean | null>(null);
@@ -50,70 +49,53 @@ function VaultStatusChip({ vaultId }: { vaultId: string }) {
 
 export default function Shell() {
   const { account, connect } = useWallet();
-  const [vaultIds, setVaultIds] = useState<string[]>([]);
-  useEffect(() => {
-    if (!account) return;
-    api<{ rows?: unknown }>(`/vaults`).then(
-      () => undefined,
-      () => undefined
-    );
-    setVaultIds([]);
-  }, [account]);
+  const [vaultIds] = useState<string[]>([]);
   const vaultId = vaultIds[0] ?? "";
 
   return (
     <div className="min-h-screen">
-      <header className="border-b border-[#262c38]">
-        <div className="mx-auto flex max-w-6xl items-center gap-4 px-4 py-3">
-          <Link to="/" className="text-lg font-semibold">
-            AgentVault
-          </Link>
-          <span className="chip" style={{ color: NETWORK === "mainnet" ? "var(--red)" : "var(--amber)" }}>
-            {NETWORK.toUpperCase()}
-          </span>
-          {vaultId ? <VaultStatusChip vaultId={vaultId} /> : null}
-          <div className="ml-auto flex items-center gap-3">
-            <Link className="text-sm text-[#98a2b3]" to="/demo">
-              Live demo
+      <nav>
+        <div className="mx-auto max-w-7xl px-4">
+          <div className="flex h-24 items-center">
+            <Link className="inline-block text-xl font-semibold tracking-tight" to="/">
+              agentvault
             </Link>
+            <span className="ml-2 chip" style={{ color: NETWORK === "mainnet" ? "var(--red)" : "var(--amber)" }}>
+              {NETWORK.toUpperCase()}
+            </span>
+            <div className="ml-auto flex items-center">
+              {[
+                ["/", "About"],
+                ["/demo", "Live demo"],
+                ["/new", "Create vault"],
+              ].map(([to, label]) => (
+                <NavLink key={to} to={to} className={({ isActive }) => `mr-8 inline-block hover:underline ${isActive ? "underline" : ""}`}>
+                  {label}
+                </NavLink>
+              ))}
+            </div>
             {account ? (
               <span className="chip" title={account}>
                 {account.length > 18 ? `${account.slice(0, 10)}…${account.slice(-6)}` : account}
               </span>
             ) : (
-              <button className="rounded border border-[#262c38] px-4 py-2" onClick={connect} aria-label="Connect wallet">
-                Connect wallet
+              <button className="pill" onClick={connect} aria-label="Connect wallet">
+                <span>Connect wallet</span>
+                <span className="pill-arrow" aria-hidden>↗</span>
               </button>
             )}
           </div>
         </div>
-      </header>
-      <div className="mx-auto flex max-w-6xl gap-6 px-4 py-6">
-        <nav className="hidden w-48 shrink-0 md:block" aria-label="Primary">
-          <ul className="space-y-1 text-sm">
-            {([
-              ["/", "Home"],
-              ["/new", "Create vault"],
-              ["/demo", "Demo"],
-              [vaultId ? `/v/${vaultId}` : "/demo", "Overview"],
-              [vaultId ? `/v/${vaultId}/agents` : "/demo", "Agents"],
-              [vaultId ? `/v/${vaultId}/requests` : "/demo", "Requests"],
-              [vaultId ? `/v/${vaultId}/approvals` : "/demo", "Approvals"],
-              [vaultId ? `/v/${vaultId}/fund` : "/demo", "Fund"],
-              [vaultId ? `/v/${vaultId}/security` : "/demo", "Security"],
-            ] as Array<[string, string]>).map(([to, label]) => (
-              <li key={to + label}>
-                <NavLink to={to} className={({ isActive }) => `block rounded px-3 py-2 ${isActive ? "bg-[#151920]" : ""}`}>
-                  {label}
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-        </nav>
-        <main className="min-w-0 flex-1">
+      </nav>
+      <div className="mx-auto flex max-w-7xl items-start gap-4 px-4">
+        <main className="min-w-0 flex-1 py-8">
           <Outlet />
         </main>
       </div>
     </div>
   );
+}
+
+export function VaultStatusChipExport({ vaultId }: { vaultId: string }) {
+  return <VaultStatusChip vaultId={vaultId} />;
 }

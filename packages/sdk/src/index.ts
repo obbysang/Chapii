@@ -8,7 +8,7 @@ import { REASON_MESSAGES, type Decision, type ReasonCode } from "@agentvault/sha
 export type Network = "testnet" | "mainnet";
 
 const DEFAULT_RPC: Record<Network, string> = {
-  testnet: "https://rpc.testnet.near.org",
+  testnet: "https://rpc.testnet.fastnear.com",
   mainnet: "https://rpc.mainnet.fastnear.com",
 };
 
@@ -129,6 +129,14 @@ export class AgentVaultClient {
     } catch (e) {
       return { decision: "TX_ERROR", error: String((e as Error).message ?? e).slice(0, 300) };
     }
+  }
+
+  async listRecentRequests(limit = 10): Promise<Record<string, unknown>[]> {
+    return (await this.provider.callFunction(this.vaultAccountId, "get_requests", {
+      from_id: 0,
+      limit,
+      reverse: true,
+    })) as Record<string, unknown>[];
   }
 
   async getRequest(id: number): Promise<Record<string, unknown>> {

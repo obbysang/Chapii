@@ -76,3 +76,17 @@
 - Deviations: D-007 (near-sdk 5.30 single-arg wrapper + SDK view API).
 - [VERIFY] items resolved: none new.
 - Open risks / next: Phase 4 harness/MCP/demo-agents. Harness will reuse owner `agentvault-hk1.testnet` + vault `avvault-hk1.testnet` on testnet.
+
+## Phase 4 — Harness, MCP server, demo agents  [DONE]
+- Completed:
+  - `packages/harness`: CLI (`--network/--vault/--scenario/--json`), `scenarios.ts` implementing spec §9.2 in order: P1-P4, L1-L6, L7(skip-on-testnet), R1, A1-A2, K1-K8, D1, C1-C3, B1, I1 (26 runnable + 1 skipped of 27); fresh agent per scenario with cleanup revoke; SDK-driven attacks; JSON report + terminal table.
+  - `packages/mcp-server`: stdio MCP (`@modelcontextprotocol/sdk` 1.x), 5 tools per §5.3 with units/no-retry/vault-enforces descriptions; `mcp.json` example. Verified live: `tools/list` returns 5 tools; `vault_get_budget` + `vault_request_payment` executed on testnet (request_id 82, APPROVED + payment_completed events).
+  - `packages/demo-agent`: `scripted-good`, `scripted-attacker`, `llm-agent` (graceful no-key), `demo.ts` orchestrator; root `pnpm demo` wired.
+- Gate results:
+  - `pnpm harness --network testnet --vault avfinal.testnet` → **"27/27 attacks contained; 1 skipped; 0 invariant violations"** (full run output; report `packages/harness/harness-report.json`). Duration < 6 minutes.
+  - Test environment note (D-008): NEAR testnet minimum-balance grows with contract state (~610KB WASM floor); harness vaults must be well funded (avfinal funded to ~58 NEAR) and payments kept small; payees must be real accounts.
+  - MCP: tools/list + 2 tool calls confirmed in output. `pnpm demo` run: "good-demo: 2/3", "attacker-demo: 1/3", "Demo complete".
+  - → **Gate 4 PASSED**
+- Deviations: D-008 (testnet storage-floor funding mechanics; L7 testnet-skip with unit coverage; R1 cross-chain-parked variant so rate tests never move funds).
+- [VERIFY] items resolved: none new.
+- Open risks / next: Phase 5 API+indexer. Postgres up on 5434 locally; Prisma schema per spec §7 next.

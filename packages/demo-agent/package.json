@@ -6,7 +6,8 @@
   "bin": {
     "agentvault-agent-good": "./dist/scripted-good.js",
     "agentvault-agent-attacker": "./dist/scripted-attacker.js",
-    "agentvault-agent-llm": "./dist/llm-agent.js"
+    "agentvault-agent-llm": "./dist/llm-agent.js",
+    "agentvault-demo": "./dist/demo.js"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
@@ -15,7 +16,8 @@
     "test": "vitest run",
     "start:good": "tsx src/scripted-good.ts",
     "start:attacker": "tsx src/scripted-attacker.ts",
-    "start:llm": "tsx src/llm-agent.ts"
+    "start:llm": "tsx src/llm-agent.ts",
+    "start:demo": "tsx src/demo.ts"
   },
   "dependencies": {
     "@agentvault/sdk": "workspace:*",
@@ -23,6 +25,7 @@
   },
   "devDependencies": {
     "eslint": "^9.18.0",
+    "near-api-js": "7.4.0",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
     "vitest": "^3.0.1"

@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "agentvault": {
+      "command": "node",
+      "args": ["dist/index.js"],
+      "env": {
+        "VAULT_ACCOUNT_ID": "avfinal.testnet",
+        "AGENT_PRIVATE_KEY": "ed25519:REPLACE_WITH_AGENT_KEY",
+        "NEAR_NETWORK": "testnet"
+      }
+    }
+  }
+}

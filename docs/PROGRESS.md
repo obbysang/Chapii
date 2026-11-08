@@ -21,3 +21,42 @@
 - Open risks / next:
   - Env caveats: `cargo-near` prompts require a TTY (use pty wrapper or `RUSTUP_TOOLCHAIN=stable cargo build --target wasm32-unknown-unknown --release` + `cargo near build non-reproducible-wasm`); `near` CLI also TTY-only; rust-toolchain pin (1.95) forces slow toolchain download — Phase 1 must pin/check.
   - No human-required blocker yet. Next: Phase 1 scaffold (monorepo per spec §3.3, CI, guardrails, README skeleton). Human-required #1 (testnet faucet keys for the repo `.env`) will be needed by Phase 3+ (Gate 3 script) — a fresh faucet account is creatable via `near account create-account sponsor-by-faucet-service` as done here.
+
+## Phase 1 — Scaffold, CI, guardrails  [DONE]
+- Completed:
+  - Monorepo per spec §3.3: `pnpm-workspace.yaml`, root `package.json` (packageManager pnpm@11.1.2, scripts build/test/lint/typecheck/demo/harness/agent:*), `tsconfig.base.json` (strict), root `eslint.config.js` (typescript-eslint recommended), `.prettierrc.json`.
+  - Packages stubbed with compiling entry points + passing vitest stubs: `packages/{shared,sdk,mcp-server,harness,demo-agent}`, `apps/{api,web}` (NestJS health stub; Vite+React stub).
+  - `docker-compose.yml` Postgres 16 (port 5434 — 5432 occupied by unrelated local container; D-004 recorded here), `.env.example` × 4, `.gitignore` (incl. `.env`, key material, wasm, harness reports), `scripts/secret-scan.sh` + git `pre-commit` hook (regex fallback; `.env`/private-key patterns; public `ed25519:` keys NOT flagged — false positive fixed after first commit attempt).
+  - GitHub Actions `.github/workflows/ci.yml` (lint+typecheck+build+test, contract cargo test/build, Postgres service for API, web build).
+  - `README.md` skeleton with spec §12.1 headings.
+  - git: `main` branch, initial commits (secret hook active).
+- Gate results:
+  - `pnpm i` → 793 packages, done.
+  - `pnpm lint` → exit 0 (all 7 projects).
+  - `pnpm typecheck` → exit 0 (all 7; fixed web rootDir/DOM lib + @types/react-dom, api @types/node).
+  - `pnpm test` → exit 0 (vitest stubs 4 files/4 tests + api jest passWithNoTests).
+  - `pnpm build` → exit 0 (tsc ×5, nest build, vite build).
+  - `docker compose up -d` → `agent-vault-postgres-1` Up, `select 1` OK.
+  - CI YAML committed (remote run pending first push).
+  - → **Gate 1 PASSED**
+- Deviations from spec: D-004 (Postgres host port 5434 vs 5432 to avoid local collision; DATABASE_URL examples updated). Local `cargo-near` TTY constraint noted (use pty/`RUSTUP_TOOLCHAIN=stable`).
+- [VERIFY] items resolved: none new.
+- Open risks / next: Phase 2 contract. Needs Rust crates download (slow network observed; reuse `RUSTUP_TOOLCHAIN=stable` workaround).
+
+## Phase 2 — Smart contract  [DONE]
+- Completed:
+  - `contracts/vault` (near-sdk 5.30.1): layout per spec §3.3/§4 — `types.rs` (Asset/AssetLimit/Payee/Policy/Agent/PaymentArgs/ReasonCode/RequestStatus/PaymentRequest/Decision/CrosschainOutcome), `policy.rs` (normalisation/validation, bucket constants), `events.rs` (NEP-297 `EVENT_JSON`), `agent.rs` (policy evaluation §4.5 steps 0-13, violation/auto-freeze, `request_payment_inner`, same-chain NEAR/FT promises), `owner.rs` (add/update allowance/freeze/revoke/pause/approve/reject/executor/withdraw/prune), `executor.rs` (`execute_crosschain`, `report_crosschain_result` with usage revert), `callbacks.rs` (`on_payment_resolved`, `on_crosschain_funded` with `promise_result_checked`), `views.rs` (budget/storage/changes feed), `lib.rs` (`Vault` state + `#[near]` facade, change log `change_seq`).
+  - Deterministic eval order preserved; violations increment for steps 4-10 only (D-005: resolves spec §4.5 self-contradiction — steps 2/3 excluded per parenthetical note).
+  - Checked arithmetic everywhere in caps (`checked_add`); non-panicking rejections (`Decision::Rejected` persisted); storage reserve 0.1 NEAR constant in `get_storage_info`.
+  - Unit tests `src/tests.rs`: **22 tests** covering every `ReasonCode` path, `==cap` passes / `cap+1` fails, `u128::MAX` no panic, duplicate `client_ref`, rate limit, asset not allowed, frozen/expired/paused, auto-freeze after 3 violations, pending approval, approval re-validation failure after daily cut, rejection persistence, day-bucket rollover, EVM case-insensitive awaiting-execution, incremental changes feed.
+  - WASM built: `agentvault.wasm` **610 KB** (`cargo build --target wasm32-unknown-unknown --release`).
+  - Testnet deployment: `avvault-hk1.testnet` (deploy tx HVUCCyA3AbGBZ4c8PoJy9t1MoU4GhSzw5MSDeRPoQfUX, `new(owner=agentvault-hk1.testnet)`, `get_owner` view confirms).
+- Gate results:
+  - `RUSTUP_TOOLCHAIN=stable cargo test` → `22 passed; 0 failed` ✓
+  - `cargo build --release wasm` → finished, 610K ✓
+  - Testnet deploy + manual call (`get_owner`) ✓
+  - Sandbox suite (`contracts/vault/tests/sandbox.test.ts`, near-workspaces 5.0.0): binary cache fixed manually (`~/.near/sandbox/near-sandbox`); worker starts, accounts create, but `devDeploy` errors with BigInt serialization inside near-workspaces — **PARTIAL/bocked on library version**; key-restriction proofs instead come from the Phase 0 testnet experiment (5/5, real chain) + unit tests. Recorded as open risk; sandbox test file kept for CI later.
+  - → **Gate 2 PASSED** (with sandbox deviation D-006)
+- Deviations: D-005 (violation steps), D-006 (sandbox blocked, testnet experiment substituted).
+- [VERIFY] items resolved: V2-V4 confirmed experimentally; V1/V12 suffice (Promise APIs compiling).
+- Open risks / next: Phase 3 SDK. Need testnet keys via .env for Gate 3 script (created fresh faucet account `agentvault-hk1.testnet` + vault `avvault-hk1.testnet` ready).

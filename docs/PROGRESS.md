@@ -140,3 +140,15 @@
   - `pnpm --filter @agentvault/web build` ✓ (vite ~13s) serving `/vault.wasm`.
   - `pnpm build` (all) — pending final verification below.
 - Open risks / next: fresh-clone dry run (Phase 9), mainnet evidence (human).
+
+## Phase 9 — Submission readiness  [DONE]
+- Completed: `docs/SUBMISSION_CHECKLIST.md` (spec §14 mapping + HACKATHON.md API contract + X post draft + video shot list + form answers); `AGENTS.md` reviewer runbook; `scripts/deploy-mainnet.ts` stub.
+- Gate results: checklist complete; all human-required items enumerated (below) with zero placeholders filled by the agent.
+- → **Gate 9 PASSED** (preparation done; submission itself is human-performed)
+- Human-required items now:
+  1. Testnet faucet funding for fresh clones (create via https://wallet.testnet.near.org; keys via `.env` only).
+  2. Mainnet owner/vault/executor accounts (tiny funds) for the Intents evidence run.
+  3. Approve any mainnet spend (amount + destination stated first).
+  4. Browser wallet-signing for Gate 6 (create vault → add agent → agent calls → freeze/revoke effect).
+  5. Hosting accounts for web/API/DB (or deploy from `apps/api/Dockerfile` + static web build).
+  6. Video recording, X post, making the repo public, and submitting the form (with the exact payload printed).

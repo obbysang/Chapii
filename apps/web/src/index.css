@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #0c0e12;
+  --panel: #151920;
+  --line: #262c38;
+  --text: #e8ebf0;
+  --muted: #98a2b3;
+  --green: #3fb68b;
+  --amber: #e8b26a;
+  --red: #e26a6a;
+  --blue: #6aa5e2;
+}
+
+body { background: var(--bg); color: var(--text); font-family: ui-sans-serif, system-ui, sans-serif; }
+a { color: inherit; }
+button { min-height: 2.5rem; }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.chip { display: inline-flex; align-items: center; gap: 0.35rem; border: 1px solid var(--line); border-radius: 999px; padding: 0.15rem 0.7rem; font-size: 0.75rem; }
+.row-mono { font-family: ui-monospace, monospace; font-size: 0.85rem; }
+pre { white-space: pre-wrap; word-break: break-word; }

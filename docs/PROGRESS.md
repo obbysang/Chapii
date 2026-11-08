@@ -109,3 +109,19 @@
 - Gate results: `/health` ok; register+index avfinal.testnet; requests API returns exact yocto amounts (Decimal-safe serialization, e.g. `"amount":"2500000000000000000000000"`); SSE emitted `connected`, `request.created` (id 95 APPROVED, 96 COMPLETED, 97 REJECTED) live during `pnpm agent:good`. API tests green.
 - → **Gate 5 PASSED**
 - Open risks / next: Phase 6 web app. Amount format fixed in clean() serializer.
+
+## Phase 6 — Web app  [DONE]
+- Completed:
+  - `apps/web` (Vite + React 18 + TS + Tailwind 4): shell (network badge, vault status chip ACTIVE/PAUSED, wallet connect), routes `/`, `/new`, `/demo`, `/v/:id`, `/v/:id/agents`, `/v/:id/requests`, `/v/:id/requests/:id`, `/v/:id/approvals`, `/v/:id/fund`, `/v/:id/security`, `/v/:id/settings`.
+  - Wallet: `@near-wallet-selector` v10.1.4 (Meteor + MyNearWallet, modal). near-api-js pinned to v6.2 for wallet-selector interop (D-009).
+  - Wizard `/new`: network + name validation + batched `createVaultBatch` (CreateAccount+Transfer+DeployContract+FunctionCall new) + `add_agent` with client-side ed25519 key generation; secret modal with `.env`/`mcp.json` snippets + "I stored it" gate; policy editor with validation + plain-English summary + JSON preview.
+  - Overview KPIs + <Feed> (SSE + 6s refresh, pause/resume); agents page w/ typed confirmations; requests list/detail (reason tooltips from `REASON_MESSAGES`); approvals = pending queue w/ approve/reject (wallet txs); security = harness report table w/ live polling; fund = Direct tab + Intents stub tab; settings stubs (pause/executor/withdraw).
+  - All states: loading skeletons, empty, error w/ retry; memo rendered as plain text; focus rings + aria labels.
+  - Tests (vitest + jsdom + Testing Library): status chip colors, feed renders from mocked API, policy editor summary — 4/4 passing. Web build passes.
+- Gate results:
+  - `pnpm --filter @agentvault/web build` → ✓ built in ~13s (718 modules).
+  - `pnpm --filter @agentvault/web test` → 4/4 ✓.
+  - `/demo` serves app shell with no wallet; /health + feed paths verified at API level (Gate 5). Browser wallet signing (create → agent → action) is **Human-required 4** — needs a human wallet session.
+  - → **Gate 6 SUBSTANTIALLY DONE** (pending human wallet check)
+- Deviations: D-009 (near-api-js v6 for web).
+- Open risks / next: Phase 7 (Intents, mainnet; Human-required 2/3) — P1.

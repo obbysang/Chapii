@@ -1,0 +1,16 @@
+[package]
+name = "agentvault-vault"
+version = "1.0.0"
+edition = "2021"
+description = "AgentVault: policy-enforced treasury for AI agents"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+near-sdk = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+[dev-dependencies]
+near-sdk = { workspace = true, features = ["unit-testing"] }

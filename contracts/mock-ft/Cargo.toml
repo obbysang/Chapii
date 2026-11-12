@@ -1,0 +1,13 @@
+[package]
+name = "agentvault-mock-ft"
+version = "1.0.0"
+edition = "2021"
+description = "Minimal NEP-141 token used by AgentVault tests and demos"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+near-sdk = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }

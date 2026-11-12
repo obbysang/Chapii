@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "agentvault": {
+      "command": "node",
+      "args": ["C:/path/to/agentvault/packages/mcp-server/dist/index.js"],
+      "env": {
+        "VAULT_ACCOUNT_ID": "demo.agentvault.testnet",
+        "AGENT_PRIVATE_KEY": "ed25519:REPLACE_WITH_AGENT_PRIVATE_KEY",
+        "AGENTVAULT_MODE": "local-http",
+        "AGENTVAULT_API_URL": "http://localhost:8787",
+        "NEAR_NETWORK": "testnet"
+      }
+    }
+  }
+}

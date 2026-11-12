@@ -1,0 +1,126 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  --bg: #070b12;
+  --panel: #0b1220;
+  --panel-2: #0f172a;
+  --border: rgba(148, 163, 184, 0.14);
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(1000px 500px at 15% -10%, rgba(96, 165, 250, 0.09), transparent 60%),
+    radial-gradient(800px 400px at 95% 0%, rgba(167, 139, 250, 0.08), transparent 55%),
+    var(--bg);
+  color: var(--text);
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: rgba(96, 165, 250, 0.35);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #24324a transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #24324a;
+  border-radius: 999px;
+}
+
+a {
+  color: inherit;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+@layer components {
+  .panel {
+    @apply rounded-2xl border border-white/10 bg-ink-900/80 shadow-card backdrop-blur;
+  }
+  .panel-soft {
+    @apply rounded-xl border border-white/10 bg-white/[0.025];
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-white/10 bg-white/[0.04] px-3.5 py-2 text-sm font-medium text-slate-200 transition hover:bg-white/[0.08] focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/70 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply btn border-sky-400/30 bg-sky-500/90 text-ink-950 hover:bg-sky-400;
+  }
+  .btn-danger {
+    @apply btn border-rose-400/30 bg-rose-500/15 text-rose-200 hover:bg-rose-500/25;
+  }
+  .btn-ghost {
+    @apply btn border-transparent bg-transparent text-slate-300 hover:bg-white/[0.06];
+  }
+  .input {
+    @apply w-full rounded-lg border border-white/10 bg-ink-950/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:border-sky-400/60 focus:outline-none focus:ring-2 focus:ring-sky-400/20;
+  }
+  .label {
+    @apply mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-400;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold;
+  }
+  .mono {
+    @apply font-mono text-[13px];
+  }
+  .table-row {
+    @apply border-b border-white/[0.06] transition hover:bg-white/[0.025];
+  }
+}
+
+.fade-in {
+  animation: fadeIn 220ms ease-out both;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, rgba(148, 163, 184, 0.08), rgba(148, 163, 184, 0.16), rgba(148, 163, 184, 0.08));
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}

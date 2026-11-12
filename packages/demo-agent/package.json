@@ -1,0 +1,28 @@
+{
+  "name": "@agentvault/demo-agent",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "demo": "node dist/demo.js",
+    "good": "node dist/run.js good",
+    "attack": "node dist/run.js attack",
+    "llm": "node dist/run.js llm",
+    "test": "vitest run --passWithNoTests",
+    "lint": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@agentvault/sdk": "workspace:*",
+    "@agentvault/shared": "workspace:*",
+    "dotenv": "^16.4.7"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2",
+    "vitest": "^3.2.4"
+  }
+}

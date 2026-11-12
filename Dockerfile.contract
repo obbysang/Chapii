@@ -1,0 +1,18 @@
+# Builds and tests the AgentVault contracts, then exports the WASM artifacts.
+# Usage:
+#   docker build -f Dockerfile.contract --target export --output type=local,dest=build/contracts .
+FROM rust:1.86-slim AS builder
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends build-essential pkg-config libssl-dev \
+    && rm -rf /var/lib/apt/lists/*
+RUN rustup target add wasm32-unknown-unknown
+WORKDIR /app
+COPY contracts ./contracts
+RUN cargo test --manifest-path contracts/Cargo.toml
+RUN cargo build --manifest-path contracts/Cargo.toml --target wasm32-unknown-unknown --release
+RUN mkdir -p /out \
+    && cp contracts/target/wasm32-unknown-unknown/release/agentvault_vault.wasm /out/vault.wasm \
+    && cp contracts/target/wasm32-unknown-unknown/release/agentvault_mock_ft.wasm /out/mock_ft.wasm
+
+FROM scratch AS export
+COPY --from=builder /out/ /

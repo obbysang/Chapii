@@ -1,0 +1,55 @@
+# syntax=docker/dockerfile:1.7
+# AgentVault API image. Builds the workspace packages it depends on and runs
+# the Fastify API with Prisma against Postgres.
+
+FROM node:22-bookworm-slim AS build
+ENV PNPM_HOME=/pnpm
+ENV PATH=$PNPM_HOME:$PATH
+RUN corepack enable \
+  && apt-get update \
+  && apt-get install -y --no-install-recommends openssl ca-certificates \
+  && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Copy every workspace manifest so the frozen lockfile resolves exactly.
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml tsconfig.base.json ./
+COPY apps/api/package.json apps/api/package.json
+COPY apps/web/package.json apps/web/package.json
+COPY packages/shared/package.json packages/shared/package.json
+COPY packages/localchain/package.json packages/localchain/package.json
+COPY packages/sdk/package.json packages/sdk/package.json
+COPY packages/harness/package.json packages/harness/package.json
+COPY packages/mcp-server/package.json packages/mcp-server/package.json
+COPY packages/demo-agent/package.json packages/demo-agent/package.json
+
+RUN pnpm install --frozen-lockfile
+
+COPY apps/api apps/api
+COPY packages packages
+
+# Generate the Prisma client first: the API's TypeScript build imports
+# `@prisma/client` types, so the client must exist before `tsc` runs.
+RUN pnpm --filter @agentvault/api exec prisma generate
+
+# Build the API and its workspace dependencies (shared, localchain, sdk, harness).
+RUN pnpm --filter @agentvault/api... build
+
+FROM node:22-bookworm-slim AS runtime
+ENV NODE_ENV=production
+ENV PNPM_HOME=/pnpm
+ENV PATH=$PNPM_HOME:$PATH
+RUN corepack enable \
+  && apt-get update \
+  && apt-get install -y --no-install-recommends openssl ca-certificates \
+  && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+COPY --from=build /app /app
+
+WORKDIR /app/apps/api
+EXPOSE 8787
+
+# db push is appropriate for this single-service demo. Use `prisma migrate deploy`
+# for a long-lived production deployment.
+CMD ["sh", "-c", "pnpm exec prisma db push --skip-generate && exec node dist/index.js"]

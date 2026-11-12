@@ -1,0 +1,47 @@
+# AgentVault
+
+> Policy-enforced treasury on NEAR for AI agents that spend money. A locked vault gives each agent a function-call key restricted to `request_payment`; the contract enforces allowlist, caps, rate limits, co-sign, expiry, replay protection and auto-freeze. 34-scenario red-team harness (27 attacks, 7 controls).
+
+## Start here
+
+- README: ./README.md
+- Architecture: ./docs/architecture.md
+- Threat model: ./docs/threat-model.md
+- API: ./docs/api.md
+- Decisions: ./docs/DECISIONS.md
+- Docs index: ./docs/README.md
+
+## Run
+
+- One command: `docker compose up --build` → http://localhost:8080
+- Local dev: `pnpm install && pnpm dev` plus `pnpm --filter @agentvault/web dev`
+- Harness: `pnpm harness` (local, no keys) or `pnpm harness --network testnet`
+- Demo: `pnpm demo` (needs the API running in local mode)
+
+## Packages
+
+- `contracts/vault` — Rust NEAR contract, policy engine.
+- `contracts/mock-ft` — minimal NEP-141 token.
+- `packages/shared` — types, zod schemas, reason codes, formatting.
+- `packages/sdk` — `AgentVaultClient` (agent key), `OwnerClient` (owner key).
+- `packages/localchain` — deterministic offline simulator.
+- `packages/harness` — 27 attacks + 7 controls.
+- `packages/mcp-server` — stdio MCP server, 5 tools.
+- `packages/demo-agent` — scripted good/attack agents, optional LLM mode.
+- `apps/api` — Fastify + Prisma + Postgres + SSE.
+- `apps/web` — React dashboard and guided demo.
+
+## MCP tools
+
+`vault_get_budget`, `vault_get_policy`, `vault_request_payment`, `vault_get_request`, `vault_list_recent_requests`.
+
+## Honest limitations
+
+- Cross-chain destination verification is off-chain.
+- Fixed time buckets allow a bounded boundary burst.
+- The local simulator is not the production contract.
+- No independent audit.
+
+## License
+
+MIT.

@@ -1,0 +1,12 @@
+{
+  "name": "vault-sandbox-tests",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test:sandbox": "vitest run"
+  },
+  "devDependencies": {
+    "near-workspaces": "^5.0.0",
+    "vitest": "^3.0.1"
+  }
+}

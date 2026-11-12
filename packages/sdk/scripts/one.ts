@@ -1,0 +1,15 @@
+import { AgentVaultClient } from '/home/micro/Desktop/Agent-Vault/packages/sdk/src/index.ts';
+import { KeyPair } from 'near-api-js';
+import fs from 'node:fs';
+const VAULT='avvault-hk1.testnet';
+const vFile=fs.readdirSync(`${process.env.HOME}/.near-credentials/testnet/${VAULT}`)[0];
+const ownerKey=JSON.parse(fs.readFileSync(`${process.env.HOME}/.near-credentials/testnet/agentvault-hk1.testnet/ed25519_4nSbvBicHbXj2vF16HBxhotxE9bzrXgoqemP9FLuZhcy.json`,'utf8')).private_key;
+import { OwnerClient } from '/home/micro/Desktop/Agent-Vault/packages/sdk/src/index.ts';
+const owner=new OwnerClient({network:'testnet',accountId:'agentvault-hk1.testnet',privateKey:ownerKey});
+const policy={limits:[{asset:'NEAR',per_tx_max:'1000000000000000000000000',daily_max:'2000000000000000000000000',cosign_above:null}],payees:[{label:'a',chain:'near',address:'avpayee.testnet',allowed_dest_assets:[]}],max_requests_per_hour:10,freeze_after_violations:3,expires_at_ns:null};
+const kp=KeyPair.fromRandom('ed25519');
+const {publicKey}=await owner.addAgent(VAULT,{agentPrivateKey:kp.toString(),name:'dbg',policy,allowanceYocto:'5000000000000000000000000'});
+console.log('added',publicKey);
+const c=new AgentVaultClient({network:'testnet',vaultAccountId:VAULT,agentPrivateKey:kp.toString()});
+const d=await c.requestPayment({client_ref:'dbg-'+Date.now(),asset:'NEAR',amount:'0',chain:'near',address:'avpayee.testnet',dest_asset:'NEAR'});
+console.log(JSON.stringify(d));

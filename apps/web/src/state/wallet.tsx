@@ -7,8 +7,7 @@ import {
   useState,
   type ReactNode,
 } from 'react';
-import { setupWalletSelector, type WalletSelector } from '@near-wallet-selector/core';
-import { setupNearWallet } from '@near-wallet-selector/near-wallet';
+import type { WalletSelector } from '@near-wallet-selector/core';
 
 const STORAGE_KEY = 'agentvault.wallet.connected';
 
@@ -35,10 +34,18 @@ const selectors = new Map<string, Promise<WalletSelector>>();
 function selectorFor(network: 'testnet' | 'mainnet'): Promise<WalletSelector> {
   const existing = selectors.get(network);
   if (existing) return existing;
-  const created = setupWalletSelector({
-    network,
-    modules: [setupNearWallet()],
-  });
+  // Wallet code is heavy (~800 kB) and unnecessary for the read-only demo, so
+  // it is only fetched when a visitor actually connects or resumes a session.
+  const created = (async () => {
+    const [{ setupWalletSelector }, { setupNearWallet }] = await Promise.all([
+      import('@near-wallet-selector/core'),
+      import('@near-wallet-selector/near-wallet'),
+    ]);
+    return setupWalletSelector({
+      network,
+      modules: [setupNearWallet()],
+    });
+  })();
   selectors.set(network, created);
   return created;
 }

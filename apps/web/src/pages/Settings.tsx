@@ -183,15 +183,15 @@ export default function Settings() {
               className={cn(
                 'flex flex-wrap items-center justify-between gap-3 rounded-xl border p-4',
                 summary.paused
-                  ? 'border-rose-400/25 bg-rose-400/[0.06]'
-                  : 'border-emerald-400/20 bg-emerald-400/[0.04]',
+                  ? 'border-rose-200 bg-rose-50'
+                  : 'border-green-200 bg-green-50',
               )}
             >
               <div className="flex items-start gap-3">
                 {summary.paused ? (
-                  <PauseCircle className="mt-0.5 h-5 w-5 shrink-0 text-rose-300" />
+                  <PauseCircle className="mt-0.5 h-5 w-5 shrink-0 text-rose-600" />
                 ) : (
-                  <PlayCircle className="mt-0.5 h-5 w-5 shrink-0 text-emerald-300" />
+                  <PlayCircle className="mt-0.5 h-5 w-5 shrink-0 text-green-700" />
                 )}
                 <div>
                   <p className="text-sm font-medium text-slate-100">
@@ -273,25 +273,25 @@ export default function Settings() {
         <div className="space-y-4">
           <Panel className="p-5">
             <h3 className="flex items-center gap-2 text-sm font-semibold text-slate-100">
-              <KeyRound className="h-4 w-4 text-sky-300" /> Key custody model
+              <KeyRound className="h-4 w-4 text-green-600" /> Key custody model
             </h3>
             <ul className="mt-3 space-y-2.5 text-xs leading-relaxed text-slate-400">
               <li className="flex gap-2">
-                <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-sky-400" />
+                <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-green-500" />
                 Agents hold their own keys. The vault stores only their public keys and policies.
               </li>
               <li className="flex gap-2">
-                <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-sky-400" />
+                <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-green-500" />
                 The owner key never reaches the API. Owner actions are composed in the browser and
                 signed by your wallet.
               </li>
               <li className="flex gap-2">
-                <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-sky-400" />
+                <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-green-500" />
                 The executor can report cross-chain outcomes but cannot create or approve requests.
               </li>
               {isLocal ? (
-                <li className="flex gap-2 text-amber-200/80">
-                  <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-amber-400" />
+                <li className="flex gap-2 text-amber-800">
+                  <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-amber-500" />
                   Simulator exception: the API generates agent keys server-side so you can drive the
                   demo. This is not part of the real contract flow.
                 </li>
@@ -301,7 +301,7 @@ export default function Settings() {
 
           <Panel className="p-5">
             <h3 className="flex items-center gap-2 text-sm font-semibold text-slate-100">
-              <CircleDollarSign className="h-4 w-4 text-emerald-300" /> Funds and payouts
+              <CircleDollarSign className="h-4 w-4 text-green-700" /> Funds and payouts
             </h3>
             <p className="mt-2 text-xs leading-relaxed text-slate-400">
               Deposits, owner withdrawals and cross-chain funding live on the Funds page. Owner
@@ -320,9 +320,9 @@ export default function Settings() {
           <Panel className="p-5">
             <h3 className="flex items-center gap-2 text-sm font-semibold text-slate-100">
               {isLocal ? (
-                <FlaskConical className="h-4 w-4 text-amber-300" />
+                <FlaskConical className="h-4 w-4 text-amber-700" />
               ) : (
-                <Globe2 className="h-4 w-4 text-sky-300" />
+                <Globe2 className="h-4 w-4 text-green-600" />
               )}
               {isLocal ? 'About this simulator' : 'Cross-chain limitation'}
             </h3>
@@ -338,8 +338,8 @@ export default function Settings() {
                 destination-chain delivery by itself. See the docs for the exact trust assumptions.
               </p>
             )}
-            <div className="mt-3 flex items-start gap-2 rounded-lg border border-white/10 bg-white/[0.02] p-3 text-[11px] leading-relaxed text-slate-400">
-              <Info className="mt-0.5 h-3.5 w-3.5 shrink-0 text-sky-300" />
+            <div className="mt-3 flex items-start gap-2 rounded-lg border border-ink-700 bg-ink-850 p-3 text-[11px] leading-relaxed text-slate-400">
+              <Info className="mt-0.5 h-3.5 w-3.5 shrink-0 text-green-600" />
               <span>
                 Changing settings emits an event; other open consoles update over server-sent events.
               </span>
@@ -347,11 +347,11 @@ export default function Settings() {
           </Panel>
 
           {summary.health === 'degraded' ? (
-            <Panel className="border-amber-400/25 bg-amber-400/[0.05] p-5">
-              <h3 className="flex items-center gap-2 text-sm font-semibold text-amber-200">
+            <Panel className="border-amber-200 bg-amber-50 p-5">
+              <h3 className="flex items-center gap-2 text-sm font-semibold text-amber-800">
                 <AlertTriangle className="h-4 w-4" /> Indexer degraded
               </h3>
-              <p className="mt-2 text-xs leading-relaxed text-amber-100/80">
+              <p className="mt-2 text-xs leading-relaxed text-amber-800">
                 The API cannot fully read this vault right now. Data shown may be stale. Check RPC
                 access for {summary.network}.
               </p>
@@ -360,12 +360,12 @@ export default function Settings() {
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3 text-[11px] text-slate-500">
+      <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-ink-700 bg-ink-850 px-4 py-3 text-[11px] text-slate-500">
         <span className="inline-flex items-center gap-1.5">
-          <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" /> Only the owner can pause, change
+          <ShieldCheck className="h-3.5 w-3.5 text-green-600" /> Only the owner can pause, change
           policy, revoke agents or withdraw.
         </span>
-        <Link to="/app/vaults" className="inline-flex items-center gap-1 text-sky-300 hover:text-sky-200">
+        <Link to="/app/vaults" className="inline-flex items-center gap-1 text-green-600 hover:text-green-700">
           Switch vault <ArrowUpRight className="h-3 w-3" />
         </Link>
       </div>

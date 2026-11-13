@@ -44,12 +44,12 @@ export function usdHint(raw: string, asset: string): string | null {
 export type Tone = 'green' | 'amber' | 'red' | 'blue' | 'violet' | 'slate';
 
 export const TONE_CLASS: Record<Tone, string> = {
-  green: 'border-emerald-400/25 bg-emerald-400/10 text-emerald-300',
-  amber: 'border-amber-400/25 bg-amber-400/10 text-amber-300',
-  red: 'border-rose-400/25 bg-rose-400/10 text-rose-300',
-  blue: 'border-sky-400/25 bg-sky-400/10 text-sky-300',
-  violet: 'border-violet-400/25 bg-violet-400/10 text-violet-300',
-  slate: 'border-white/10 bg-white/[0.04] text-slate-300',
+  green: 'border-green-200 bg-green-50 text-green-700',
+  amber: 'border-amber-200 bg-amber-50 text-amber-700',
+  red: 'border-rose-200 bg-rose-50 text-rose-700',
+  blue: 'border-ink-600 bg-ink-850 text-slate-500',
+  violet: 'border-violet-200 bg-violet-50 text-violet-700',
+  slate: 'border-ink-700 bg-ink-850 text-slate-500',
 };
 
 export function requestTone(status: RequestStatus | string): Tone {

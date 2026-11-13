@@ -25,6 +25,7 @@
     "contract:build": "bash scripts/build-contract.sh",
     "contract:test": "cargo test --manifest-path contracts/Cargo.toml",
     "deploy:testnet": "tsx scripts/deploy-testnet.ts",
+    "deploy:mainnet": "tsx scripts/deploy-mainnet.ts",
     "vault:lock": "tsx scripts/lock-vault.ts",
     "docker:up": "docker compose up --build",
     "docker:down": "docker compose down -v"

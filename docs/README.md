@@ -7,6 +7,9 @@ Start with the [README](../README.md) for the quick start. These documents go de
 | [architecture.md](architecture.md) | How the pieces fit together, the two runtime modes, and every important data flow. |
 | [threat-model.md](threat-model.md) | What can go wrong, which control stops it, where that control lives, and what is still not solved. |
 | [api.md](api.md) | Every REST endpoint, SSE stream, request/response shape, and error code. |
+| [mcp.md](mcp.md) | The MCP server: tools, modes, client wiring, and safety rules. |
+| [sdk.md](sdk.md) | The TypeScript SDK: usage, amounts, assets, and error handling. |
+| [limitations.md](limitations.md) | The known gaps, each with its enforcement boundary. |
 | [DECISIONS.md](DECISIONS.md) | Why Fastify, why a local simulator, why the wallet-selector pins, and other trade-offs. |
 | [SPEC.md](SPEC.md) | The original product specification this implementation was built against. |
 | [AGENT_PROMPT.md](AGENT_PROMPT.md) | The implementation brief. |

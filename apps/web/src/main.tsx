@@ -12,6 +12,9 @@ const queryClient = new QueryClient({
       retry: 1,
       refetchOnWindowFocus: true,
       staleTime: 2_000,
+      // Safety net: SSE drives instant updates, polling self-heals if the
+      // stream drops (proxy restart, laptop sleep, flaky network).
+      refetchInterval: 30_000,
     },
   },
 });

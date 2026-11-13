@@ -52,14 +52,14 @@ export default function Vaults() {
 
       <div className="grid gap-3 sm:grid-cols-3">
         <Panel className="flex items-center gap-3 p-4">
-          <Boxes className="h-5 w-5 text-sky-300" />
+          <Boxes className="h-5 w-5 text-green-600" />
           <div>
             <p className="text-[10px] uppercase tracking-wider text-slate-500">Indexed vaults</p>
             <p className="text-lg font-semibold text-slate-100">{vaults.length}</p>
           </div>
         </Panel>
         <Panel className="flex items-center gap-3 p-4">
-          <ShieldCheck className="h-5 w-5 text-emerald-300" />
+          <ShieldCheck className="h-5 w-5 text-green-700" />
           <div>
             <p className="text-[10px] uppercase tracking-wider text-slate-500">Active context</p>
             <p className="truncate text-sm font-medium text-slate-200">
@@ -68,7 +68,7 @@ export default function Vaults() {
           </div>
         </Panel>
         <Panel className="flex items-center gap-3 p-4">
-          <FlaskConical className="h-5 w-5 text-amber-300" />
+          <FlaskConical className="h-5 w-5 text-amber-700" />
           <div>
             <p className="text-[10px] uppercase tracking-wider text-slate-500">Simulator vaults</p>
             <p className="text-lg font-semibold text-slate-100">
@@ -112,8 +112,8 @@ export default function Vaults() {
                   className={cn(
                     'rounded-xl border p-4 transition',
                     selected
-                      ? 'border-sky-400/30 bg-sky-400/[0.05]'
-                      : 'border-white/[0.09] bg-white/[0.02] hover:border-white/20',
+                      ? 'border-green-300 bg-green-50'
+                      : 'border-ink-700 bg-ink-850 hover:border-ink-600',
                   )}
                 >
                   <div className="flex flex-wrap items-start justify-between gap-3">
@@ -164,7 +164,7 @@ export default function Vaults() {
                     </div>
                   </div>
 
-                  <div className="mt-4 grid grid-cols-2 gap-2 border-t border-white/[0.06] pt-3 sm:grid-cols-4">
+                  <div className="mt-4 grid grid-cols-2 gap-2 border-t border-ink-700 pt-3 sm:grid-cols-4">
                     <div>
                       <p className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-slate-500">
                         <CircleDollarSign className="h-3 w-3" /> NEAR

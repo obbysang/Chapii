@@ -93,9 +93,9 @@ export default function Landing() {
   const balances = summary?.balances.filter((balance) => balance.amount !== '0') ?? [];
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-dvh">
       <PublicHeader />
-
+      <main>
       <section className="relative overflow-hidden">
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.35]"
@@ -112,13 +112,11 @@ export default function Landing() {
             <Badge tone="blue" dot className="mb-5">
               NEAR · policy-enforced treasury for AI agents
             </Badge>
-            <h1 className="max-w-2xl text-4xl font-semibold leading-[1.06] tracking-tight text-slate-100 sm:text-6xl">
+            <h1 className="max-w-2xl text-balance text-4xl font-semibold leading-[1.06] tracking-tight text-slate-100 sm:text-6xl">
               Give your agent a wallet
-              <span className="block bg-gradient-to-r from-sky-300 via-sky-400 to-violet-400 bg-clip-text text-transparent">
-                it can&apos;t drain.
-              </span>
+              <span className="block text-green-600">it can&apos;t drain.</span>
             </h1>
-            <p className="mt-5 max-w-xl text-base leading-relaxed text-slate-400 sm:text-lg">
+            <p className="mt-5 max-w-xl text-pretty text-base leading-relaxed text-slate-400 sm:text-lg">
               AgentVault is a NEAR smart contract that decides every payment before it happens.
               Allowlisted payees, hard caps, rate limits and owner co-sign — enforced on-chain, not
               in a prompt.
@@ -133,26 +131,26 @@ export default function Landing() {
             </div>
             <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-slate-500">
               <span className="inline-flex items-center gap-1.5">
-                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" /> 34 scenarios
+                <CheckCircle2 className="h-3.5 w-3.5 text-green-600" /> 34 scenarios
               </span>
               <span className="inline-flex items-center gap-1.5">
-                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" /> 27 attack classes contained
+                <CheckCircle2 className="h-3.5 w-3.5 text-green-600" /> 27 attack classes contained
               </span>
               <span className="inline-flex items-center gap-1.5">
-                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" /> 0 invariant violations
+                <CheckCircle2 className="h-3.5 w-3.5 text-green-600" /> 0 invariant violations
               </span>
               <span className="inline-flex items-center gap-1.5">
-                <GitBranch className="h-3.5 w-3.5 text-sky-400" /> MIT · Rust + TypeScript
+                <GitBranch className="h-3.5 w-3.5 text-green-600" /> MIT · Rust + TypeScript
               </span>
             </div>
           </div>
 
           <div className="relative">
-            <div className="absolute -inset-4 rounded-[28px] bg-gradient-to-tr from-sky-500/10 via-transparent to-violet-500/10 blur-2xl" />
+            <div className="absolute -inset-4 rounded-[28px] bg-green-500/10 blur-2xl" />
             <div className="panel relative overflow-hidden p-4 sm:p-5">
-              <div className="flex items-center justify-between border-b border-white/[0.06] pb-3">
+              <div className="flex items-center justify-between border-b border-ink-700 pb-3">
                 <div className="flex items-center gap-2">
-                  <span className="flex h-7 w-7 items-center justify-center rounded-md bg-sky-400/10 text-sky-300">
+                  <span className="flex h-7 w-7 items-center justify-center rounded-md bg-green-100 text-green-600">
                     <ShieldCheck className="h-4 w-4" />
                   </span>
                   <div>
@@ -171,14 +169,14 @@ export default function Landing() {
                   { label: 'Daily cap', value: '20 NEAR' },
                   { label: 'Co-sign', value: '> 4 NEAR' },
                 ].map((item) => (
-                  <div key={item.label} className="rounded-lg border border-white/[0.07] bg-white/[0.02] px-2 py-2.5">
+                  <div key={item.label} className="rounded-lg border border-ink-700 bg-ink-850 px-2 py-2.5">
                     <p className="text-[9px] uppercase tracking-wider text-slate-500">{item.label}</p>
                     <p className="mt-0.5 text-xs font-semibold text-slate-200">{item.value}</p>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-4 rounded-xl border border-white/[0.07] bg-ink-950/70 p-3.5">
+              <div className="mt-4 rounded-xl border border-ink-700 bg-mist p-3.5">
                 <div className="mb-2 flex items-center gap-2 text-[10px] uppercase tracking-wider text-slate-500">
                   <Terminal className="h-3 w-3" /> agent.request_payment()
                 </div>
@@ -190,16 +188,16 @@ export default function Landing() {
                 </pre>
               </div>
 
-              <div className="mt-3 rounded-xl border border-rose-400/25 bg-rose-500/[0.07] p-3.5">
+              <div className="mt-3 rounded-xl border border-rose-200 bg-rose-50 p-3.5">
                 <div className="flex items-center justify-between gap-2">
-                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-rose-300">
+                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-rose-600">
                     <Ban className="h-3.5 w-3.5" /> REJECTED
                   </span>
-                  <span className="mono rounded bg-rose-400/10 px-1.5 py-0.5 text-[10px] text-rose-200">
+                  <span className="mono rounded bg-rose-100 px-1.5 py-0.5 text-[10px] text-rose-700">
                     PAYEE_NOT_ALLOWED
                   </span>
                 </div>
-                <p className="mt-2 text-[11px] leading-relaxed text-rose-200/70">
+                <p className="mt-2 text-[11px] leading-relaxed text-rose-700">
                   Budget unchanged. No transfer attempted. The agent got a machine-readable reason
                   instead of a drained treasury.
                 </p>
@@ -207,7 +205,7 @@ export default function Landing() {
 
               <div className="mt-3 flex items-center justify-between text-[10px] text-slate-500">
                 <span className="inline-flex items-center gap-1">
-                  <Zap className="h-3 w-3 text-emerald-400" /> decided on-chain in one call
+                  <Zap className="h-3 w-3 text-green-600" /> decided on-chain in one call
                 </span>
                 <span className="mono">{truncateMiddle(summary?.ownerId ?? 'demo-owner.testnet', 10, 6)}</span>
               </div>
@@ -216,7 +214,7 @@ export default function Landing() {
         </div>
       </section>
 
-      <section className="border-y border-white/[0.06] bg-white/[0.015]">
+      <section className="border-y border-ink-700 bg-ink-850">
         <div className="mx-auto grid w-full max-w-6xl gap-6 px-4 py-8 sm:grid-cols-2 sm:px-6 lg:grid-cols-4">
           {[
             {
@@ -282,7 +280,7 @@ export default function Landing() {
             },
           ].map((item) => (
             <div key={item.title} className="panel p-5">
-              <item.icon className="h-5 w-5 text-rose-300" />
+              <item.icon className="h-5 w-5 text-rose-600" />
               <h3 className="mt-3 text-sm font-semibold text-slate-200">{item.title}</h3>
               <p className="mt-1.5 text-sm leading-relaxed text-slate-400">{item.body}</p>
             </div>
@@ -290,7 +288,7 @@ export default function Landing() {
         </div>
       </section>
 
-      <section className="border-y border-white/[0.06] bg-white/[0.015]">
+      <section className="border-y border-ink-700 bg-ink-850">
         <div className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 lg:py-20">
           <div className="mb-9 max-w-2xl">
             <Badge tone="blue" className="mb-4">The mechanism</Badge>
@@ -308,7 +306,7 @@ export default function Landing() {
                 <span className="absolute right-4 top-4 text-[11px] font-mono text-slate-600">
                   0{index + 1}
                 </span>
-                <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-sky-400/20 bg-sky-400/10 text-sky-300">
+                <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-green-200 bg-green-100 text-green-600">
                   <item.icon className="h-4.5 w-4.5" style={{ height: 18, width: 18 }} />
                 </span>
                 <h3 className="mt-3 text-sm font-semibold text-slate-200">{item.title}</h3>
@@ -318,15 +316,15 @@ export default function Landing() {
           </div>
           <div className="mt-4 panel p-4">
             <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400">
-              <span className="chip border-white/10 bg-white/[0.04] text-slate-300">agent</span>
+              <span className="chip border-ink-700 bg-ink-800 text-slate-300">agent</span>
               <ArrowRight className="h-3 w-3" />
-              <span className="chip border-sky-400/20 bg-sky-400/10 text-sky-300">request_payment()</span>
+              <span className="chip border-green-200 bg-green-100 text-green-600">request_payment()</span>
               <ArrowRight className="h-3 w-3" />
-              <span className="chip border-violet-400/20 bg-violet-400/10 text-violet-200">policy check</span>
+              <span className="chip border-violet-200 bg-violet-100 text-violet-700">policy check</span>
               <ArrowRight className="h-3 w-3" />
-              <span className="chip border-emerald-400/20 bg-emerald-400/10 text-emerald-300">approve / reject / co-sign</span>
+              <span className="chip border-green-200 bg-green-100 text-green-700">approve / reject / co-sign</span>
               <ArrowRight className="h-3 w-3" />
-              <span className="chip border-white/10 bg-white/[0.04] text-slate-300">receipt + event</span>
+              <span className="chip border-ink-700 bg-ink-800 text-slate-300">receipt + event</span>
             </div>
           </div>
         </div>
@@ -347,7 +345,7 @@ export default function Landing() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {policyPieces.map((piece) => (
             <div key={piece.title} className="panel p-5">
-              <piece.icon className="h-4.5 w-4.5 text-sky-300" style={{ height: 18, width: 18 }} />
+              <piece.icon className="h-4.5 w-4.5 text-green-600" style={{ height: 18, width: 18 }} />
               <h3 className="mt-3 text-sm font-semibold text-slate-200">{piece.title}</h3>
               <p className="mt-1.5 text-sm leading-relaxed text-slate-400">{piece.body}</p>
             </div>
@@ -355,7 +353,7 @@ export default function Landing() {
         </div>
       </section>
 
-      <section className="border-y border-white/[0.06] bg-white/[0.015]">
+      <section className="border-y border-ink-700 bg-ink-850">
         <div className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 lg:py-20">
           <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
             <div>
@@ -375,7 +373,7 @@ export default function Landing() {
                   { value: '0', label: 'invariant violations' },
                 ].map((stat) => (
                   <div key={stat.label} className="panel-soft p-3 text-center">
-                    <p className="text-lg font-semibold text-emerald-300">{stat.value}</p>
+                    <p className="text-lg font-semibold text-green-700">{stat.value}</p>
                     <p className="mt-0.5 text-[10px] uppercase tracking-wider text-slate-500">
                       {stat.label}
                     </p>
@@ -383,24 +381,24 @@ export default function Landing() {
                 ))}
               </div>
               <p className="mt-4 text-xs text-slate-500">
-                Run it from the UI, from <code className="rounded bg-white/[0.05] px-1 font-mono">pnpm harness</code>,
+                Run it from the UI, from <code className="rounded bg-ink-800 px-1 font-mono">pnpm harness</code>,
                 or against a real testnet vault. Mainnet is blocked by configuration.
               </p>
             </div>
             <div className="panel overflow-hidden">
-              <div className="flex items-center justify-between border-b border-white/[0.07] px-4 py-3">
+              <div className="flex items-center justify-between border-b border-ink-700 px-4 py-3">
                 <span className="inline-flex items-center gap-2 text-xs font-semibold text-slate-300">
-                  <Radar className="h-3.5 w-3.5 text-rose-300" /> Live decision preview
+                  <Radar className="h-3.5 w-3.5 text-rose-600" /> Live decision preview
                 </span>
                 <span className="text-[10px] text-slate-500">deterministic policy engine</span>
               </div>
               <ul>
                 {levels.map((level) => (
-                  <li key={level.label} className="flex items-center gap-3 border-b border-white/[0.05] px-4 py-3 last:border-0">
+                  <li key={level.label} className="flex items-center gap-3 border-b border-ink-700/70 px-4 py-3 last:border-0">
                     <span
                       className={cn(
                         'flex h-6 w-6 shrink-0 items-center justify-center rounded-md',
-                        level.tone === 'green' ? 'bg-emerald-400/10 text-emerald-300' : 'bg-rose-400/10 text-rose-300',
+                        level.tone === 'green' ? 'bg-green-100 text-green-700' : 'bg-rose-100 text-rose-600',
                       )}
                     >
                       {level.tone === 'green' ? <CheckCircle2 className="h-3.5 w-3.5" /> : <Ban className="h-3.5 w-3.5" />}
@@ -412,7 +410,7 @@ export default function Landing() {
                     <span
                       className={cn(
                         'shrink-0 font-mono text-[10px]',
-                        level.tone === 'green' ? 'text-emerald-300' : 'text-rose-300',
+                        level.tone === 'green' ? 'text-green-700' : 'text-rose-600',
                       )}
                     >
                       {level.result}
@@ -438,7 +436,7 @@ export default function Landing() {
               verifies the destination chain outcome. This is <strong className="text-slate-200">not</strong>{' '}
               a trustless atomic bridge: you are trusting the intents solver set for delivery.
             </p>
-            <Link to="/demo?scenario=crosschain" className="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-sky-300 hover:text-sky-200">
+            <Link to="/demo?scenario=crosschain" className="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-green-600 hover:text-green-700">
               Trace a simulated cross-chain payout <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </div>
@@ -448,19 +446,19 @@ export default function Landing() {
             </Badge>
             <h3 className="text-xl font-semibold text-slate-100">A real developer surface</h3>
             <ul className="mt-3 space-y-2 text-sm text-slate-400">
-              <li className="flex items-start gap-2"><Code2 className="mt-0.5 h-4 w-4 shrink-0 text-sky-300" /> TypeScript SDK with exact raw-unit amounts.</li>
-              <li className="flex items-start gap-2"><Terminal className="mt-0.5 h-4 w-4 shrink-0 text-sky-300" /> MCP server exposing policy, budgets and request_payment to any MCP agent.</li>
-              <li className="flex items-start gap-2"><CircleDollarSign className="mt-0.5 h-4 w-4 shrink-0 text-sky-300" /> Auto-generated reasons the agent can act on: stop, shrink, or ask the owner.</li>
-              <li className="flex items-start gap-2"><GitBranch className="mt-0.5 h-4 w-4 shrink-0 text-sky-300" /> One-command Docker demo that runs with zero secrets.</li>
+              <li className="flex items-start gap-2"><Code2 className="mt-0.5 h-4 w-4 shrink-0 text-green-600" /> TypeScript SDK with exact raw-unit amounts.</li>
+              <li className="flex items-start gap-2"><Terminal className="mt-0.5 h-4 w-4 shrink-0 text-green-600" /> MCP server exposing policy, budgets and request_payment to any MCP agent.</li>
+              <li className="flex items-start gap-2"><CircleDollarSign className="mt-0.5 h-4 w-4 shrink-0 text-green-600" /> Auto-generated reasons the agent can act on: stop, shrink, or ask the owner.</li>
+              <li className="flex items-start gap-2"><GitBranch className="mt-0.5 h-4 w-4 shrink-0 text-green-600" /> One-command Docker demo that runs with zero secrets.</li>
             </ul>
-            <div className="mt-4 rounded-lg border border-white/[0.07] bg-ink-950/60 p-3 font-mono text-[11px] text-slate-400">
+            <div className="mt-4 rounded-lg border border-ink-700 bg-mist p-3 font-mono text-[11px] text-slate-400">
               <span className="text-slate-600">$ </span>docker compose up --build
             </div>
           </div>
         </div>
       </section>
 
-      <section className="border-t border-white/[0.06] bg-gradient-to-b from-sky-500/[0.06] to-transparent">
+      <section className="border-t border-ink-700 bg-gradient-to-b from-green-500/[0.06] to-transparent">
         <div className="mx-auto flex w-full max-w-6xl flex-col items-start justify-between gap-6 px-4 py-14 sm:px-6 md:flex-row md:items-center">
           <div>
             <h2 className="text-2xl font-semibold tracking-tight text-slate-100 sm:text-3xl">
@@ -482,6 +480,7 @@ export default function Landing() {
         </div>
       </section>
 
+      </main>
       <Footer />
     </div>
   );

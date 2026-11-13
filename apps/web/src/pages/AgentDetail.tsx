@@ -194,7 +194,7 @@ export default function AgentDetail() {
                 <Snowflake className="h-3.5 w-3.5" /> Freeze
               </Button>
             ) : agent.status === 'FROZEN' ? (
-              <Button variant="ghost" className="text-emerald-300" onClick={() => act.mutate({ action: 'unfreeze' })} disabled={act.isPending}>
+              <Button variant="ghost" className="text-green-700" onClick={() => act.mutate({ action: 'unfreeze' })} disabled={act.isPending}>
                 <Sun className="h-3.5 w-3.5" /> Unfreeze
               </Button>
             ) : null}
@@ -207,7 +207,7 @@ export default function AgentDetail() {
         </div>
       </div>
 
-      <div className="grid gap-5 xl:grid-cols-[1.5fr_1fr]">
+      <div className="grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
         <div className="space-y-5">
           <Panel className="p-5">
             <SectionTitle
@@ -237,7 +237,7 @@ export default function AgentDetail() {
                     </div>
                   );
                 })}
-                <div className="grid grid-cols-2 gap-3 border-t border-white/[0.06] pt-3 text-xs sm:grid-cols-4">
+                <div className="grid grid-cols-2 gap-3 border-t border-ink-700 pt-3 text-xs sm:grid-cols-4">
                   <div>
                     <p className="text-slate-500">Rate left</p>
                     <p className="mt-0.5 text-slate-200">{budget.rate_remaining}</p>
@@ -277,23 +277,23 @@ export default function AgentDetail() {
           <Panel className="p-5">
             <SectionTitle title="Allowlisted payees" subtitle="Exact chain and address pairs. No wildcards." />
             {agent.policy.payees.length === 0 ? (
-              <div className="rounded-lg border border-amber-400/20 bg-amber-400/[0.06] p-3 text-xs text-amber-200">
+              <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-800">
                 No payees are allowlisted. Every payment will be rejected with PAYEE_NOT_ALLOWED.
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full min-w-[520px] text-left text-sm">
                   <thead>
-                    <tr className="border-b border-white/[0.07] text-[10px] uppercase tracking-wider text-slate-500">
-                      <th className="px-2 py-2 font-semibold">Label</th>
-                      <th className="px-2 py-2 font-semibold">Chain</th>
-                      <th className="px-2 py-2 font-semibold">Address</th>
-                      <th className="px-2 py-2 font-semibold">Dest. assets</th>
+                    <tr className="border-b border-ink-700 text-[10px] uppercase tracking-wider text-slate-500">
+                      <th scope="col" className="px-2 py-2 font-semibold">Label</th>
+                      <th scope="col" className="px-2 py-2 font-semibold">Chain</th>
+                      <th scope="col" className="px-2 py-2 font-semibold">Address</th>
+                      <th scope="col" className="px-2 py-2 font-semibold">Dest. assets</th>
                     </tr>
                   </thead>
                   <tbody>
                     {agent.policy.payees.map((payee) => (
-                      <tr key={`${payee.chain}:${payee.address}`} className="border-b border-white/[0.05] last:border-0">
+                      <tr key={`${payee.chain}:${payee.address}`} className="border-b border-ink-700/70 last:border-0">
                         <td className="px-2 py-2.5 text-xs text-slate-200">{payee.label}</td>
                         <td className="px-2 py-2.5 text-xs uppercase text-slate-500">{payee.chain}</td>
                         <td className="mono px-2 py-2.5 text-[11px] text-slate-300">{truncateMiddle(payee.address, 18, 10)}</td>
@@ -313,16 +313,16 @@ export default function AgentDetail() {
           <Panel className="p-5">
             <SectionTitle title="Key scope" subtitle="What this key can and cannot do." />
             <div className="space-y-2.5">
-              <div className="flex items-start gap-2 rounded-lg border border-emerald-400/15 bg-emerald-400/[0.05] p-3">
-                <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-300" />
+              <div className="flex items-start gap-2 rounded-lg border border-green-200 bg-green-50 p-3">
+                <Check className="mt-0.5 h-4 w-4 shrink-0 text-green-700" />
                 <div className="text-xs">
-                  <p className="font-medium text-emerald-200">request_payment</p>
-                  <p className="mt-0.5 text-emerald-200/60">Create a payment request within policy.</p>
+                  <p className="font-medium text-green-700">request_payment</p>
+                  <p className="mt-0.5 text-green-700">Create a payment request within policy.</p>
                 </div>
               </div>
               {['withdraw_near / withdraw_ft', 'add_agent / update_policy', 'pause / set_executor', 'approve_request'].map((item) => (
-                <div key={item} className="flex items-start gap-2 rounded-lg border border-white/[0.06] bg-white/[0.02] p-3">
-                  <X className="mt-0.5 h-4 w-4 shrink-0 text-rose-300" />
+                <div key={item} className="flex items-start gap-2 rounded-lg border border-ink-700 bg-ink-850 p-3">
+                  <X className="mt-0.5 h-4 w-4 shrink-0 text-rose-600" />
                   <div className="text-xs">
                     <p className="font-medium text-slate-300">{item}</p>
                     <p className="mt-0.5 text-slate-500">Owner-only. Rejected by assert_owner.</p>
@@ -336,7 +336,7 @@ export default function AgentDetail() {
             <SectionTitle title="Policy limits" />
             <div className="space-y-3">
               {agent.policy.limits.map((limit) => (
-                <div key={limit.asset} className="rounded-lg border border-white/[0.07] bg-white/[0.02] p-3">
+                <div key={limit.asset} className="rounded-lg border border-ink-700 bg-ink-850 p-3">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-semibold text-slate-200">{symbolOf(limit.asset)}</span>
                     <span className="text-[10px] text-slate-500">{limit.asset}</span>
@@ -359,7 +359,7 @@ export default function AgentDetail() {
 
           <Panel className="p-5">
             <SectionTitle title="Fingerprint" />
-            <div className="rounded-lg border border-white/[0.07] bg-ink-950/60 p-3">
+            <div className="rounded-lg border border-ink-700 bg-mist p-3">
               <p className="mono break-all text-[11px] leading-relaxed text-slate-400">{agent.publicKey}</p>
             </div>
             <div className="mt-3 flex items-center gap-2 text-[11px] text-slate-500">
@@ -388,7 +388,7 @@ export default function AgentDetail() {
           </>
         }
       >
-        <div className="mb-4 flex items-start gap-2 rounded-lg border border-amber-400/20 bg-amber-400/[0.06] p-3 text-xs text-amber-200">
+        <div className="mb-4 flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-800">
           <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
           Tightening a policy takes effect immediately. Loosening it is also immediate, which is why
           the owner key is the only key that can call this method.
@@ -415,7 +415,7 @@ export default function AgentDetail() {
           </>
         }
       >
-        <div className="flex items-start gap-2 rounded-lg border border-rose-400/25 bg-rose-400/[0.07] p-3 text-xs text-rose-200">
+        <div className="flex items-start gap-2 rounded-lg border border-rose-200 bg-rose-100 p-3 text-xs text-rose-700">
           <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
           <span>
             This cannot be undone. Existing budgets stop being spendable and the key can never be
@@ -424,7 +424,7 @@ export default function AgentDetail() {
         </div>
       </Modal>
 
-      <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4 text-[11px] text-slate-500">
+      <div className="rounded-xl border border-ink-700 bg-ink-850 p-4 text-[11px] text-slate-500">
         <span className="inline-flex items-center gap-1.5 font-semibold text-slate-400">
           <KeyRound className="h-3.5 w-3.5" /> Key handling
         </span>{' '}

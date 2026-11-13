@@ -134,7 +134,7 @@ export default function NewVault() {
         <div className="grid gap-4 lg:grid-cols-[1.4fr_1fr]">
           <Panel className="p-5">
             <div className="mb-4 flex items-center gap-2">
-              <FlaskConical className="h-4 w-4 text-amber-300" />
+              <FlaskConical className="h-4 w-4 text-amber-700" />
               <h2 className="text-sm font-semibold text-slate-100">Local simulator</h2>
               <Badge tone="amber">no funds move</Badge>
             </div>
@@ -192,8 +192,8 @@ export default function NewVault() {
                 />
               </Field>
 
-              <div className="rounded-xl border border-amber-400/20 bg-amber-400/[0.06] p-3.5 text-[11px] leading-relaxed text-amber-100/80">
-                <p className="flex items-center gap-1.5 font-semibold text-amber-200">
+              <div className="rounded-xl border border-amber-200 bg-amber-50 p-3.5 text-[11px] leading-relaxed text-amber-800">
+                <p className="flex items-center gap-1.5 font-semibold text-amber-800">
                   <Info className="h-3.5 w-3.5" /> What this mode does
                 </p>
                 <p className="mt-1.5">
@@ -224,7 +224,7 @@ export default function NewVault() {
           <div className="space-y-4">
             <Panel className="p-5">
               <h3 className="flex items-center gap-2 text-sm font-semibold text-slate-100">
-                <ShieldCheck className="h-4 w-4 text-emerald-300" /> Included by default
+                <ShieldCheck className="h-4 w-4 text-green-700" /> Included by default
               </h3>
               <ul className="mt-3 space-y-2.5 text-xs text-slate-400">
                 {[
@@ -234,7 +234,7 @@ export default function NewVault() {
                   'Owner approvals, pause, freeze, revoke, policy edits and the red-team suite.',
                 ].map((item) => (
                   <li key={item} className="flex gap-2">
-                    <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-sky-400" />
+                    <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-green-500" />
                     <span>{item}</span>
                   </li>
                 ))}
@@ -242,7 +242,7 @@ export default function NewVault() {
             </Panel>
             <Panel className="p-5">
               <h3 className="flex items-center gap-2 text-sm font-semibold text-slate-100">
-                <Globe2 className="h-4 w-4 text-sky-300" /> Want the real thing?
+                <Globe2 className="h-4 w-4 text-green-600" /> Want the real thing?
               </h3>
               <p className="mt-2 text-xs leading-relaxed text-slate-400">
                 Deploy the Rust contract to a testnet account, then register it in the next tab.
@@ -251,7 +251,7 @@ export default function NewVault() {
               <p className="mt-3 font-mono text-[10px] text-slate-500">
                 cargo near deploy … --initFunction new --initArgs {'{"owner_id":"you.testnet"}'}
               </p>
-              <a href="/docs/README.md" className="mt-3 inline-block text-xs text-sky-300 hover:text-sky-200">
+              <a href="/docs/README.md" className="mt-3 inline-block text-xs text-green-600 hover:text-green-700">
                 Deployment guide →
               </a>
             </Panel>
@@ -261,7 +261,7 @@ export default function NewVault() {
         <div className="grid gap-4 lg:grid-cols-[1.4fr_1fr]">
           <Panel className="p-5">
             <div className="mb-4 flex items-center gap-2">
-              <Link2 className="h-4 w-4 text-sky-300" />
+              <Link2 className="h-4 w-4 text-green-600" />
               <h2 className="text-sm font-semibold text-slate-100">Deployed contract</h2>
               <Badge tone="blue">{health?.network ?? 'testnet'}</Badge>
             </div>
@@ -300,14 +300,14 @@ export default function NewVault() {
                 className={cn(
                   'flex w-full items-start gap-3 rounded-xl border p-3.5 text-left transition',
                   confirmRegister
-                    ? 'border-emerald-400/30 bg-emerald-400/[0.06]'
-                    : 'border-white/10 bg-white/[0.02] hover:bg-white/[0.04]',
+                    ? 'border-green-300 bg-green-50'
+                    : 'border-ink-700 bg-ink-850 hover:bg-ink-800',
                 )}
               >
                 <span
                   className={cn(
                     'mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded border',
-                    confirmRegister ? 'border-emerald-400 bg-emerald-400 text-slate-900' : 'border-white/20',
+                    confirmRegister ? 'border-green-600 bg-green-500 text-[#0b120d]' : 'border-ink-600',
                   )}
                 >
                   {confirmRegister ? <BadgeCheck className="h-3 w-3" /> : null}
@@ -318,7 +318,7 @@ export default function NewVault() {
                 </span>
               </button>
 
-              <div className="rounded-xl border border-white/10 bg-white/[0.02] p-3.5 text-[11px] leading-relaxed text-slate-400">
+              <div className="rounded-xl border border-ink-700 bg-ink-850 p-3.5 text-[11px] leading-relaxed text-slate-400">
                 <p className="flex items-center gap-1.5 font-semibold text-slate-300">
                   <Wallet className="h-3.5 w-3.5" /> No owner keys here
                 </p>
@@ -365,7 +365,7 @@ export default function NewVault() {
             </Panel>
             <Panel className="p-5">
               <h3 className="flex items-center gap-2 text-sm font-semibold text-slate-100">
-                <Info className="h-4 w-4 text-sky-300" /> Requirements
+                <Info className="h-4 w-4 text-green-600" /> Requirements
               </h3>
               <ul className="mt-3 space-y-2 text-xs text-slate-400">
                 <li>The account must expose AgentVault view methods.</li>
@@ -373,7 +373,7 @@ export default function NewVault() {
                 <li>Your browser wallet must hold the owner key to sign actions.</li>
               </ul>
               {health?.network === 'testnet' ? (
-                <p className="mt-3 border-t border-white/[0.06] pt-3 text-[11px] text-slate-500">
+                <p className="mt-3 border-t border-ink-700 pt-3 text-[11px] text-slate-500">
                   Deploy first:{' '}
                   <span className="mono text-slate-400">
                     {truncateMiddle(vaultId || 'vault.you.testnet', 16, 10)}

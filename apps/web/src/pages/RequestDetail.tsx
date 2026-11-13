@@ -98,7 +98,7 @@ function Timeline({
   ];
 
   return (
-    <ol className="relative space-y-4 border-l border-white/[0.08] pl-5">
+    <ol className="relative space-y-4 border-l border-ink-700 pl-5">
       {steps.map((step) => {
         const done = reached(step.id);
         const Icon = step.icon;
@@ -107,8 +107,8 @@ function Timeline({
             <span
               className={`absolute -left-[30px] flex h-5 w-5 items-center justify-center rounded-full border ${
                 done
-                  ? 'border-sky-400/40 bg-sky-400/15 text-sky-300'
-                  : 'border-white/10 bg-ink-950 text-slate-600'
+                  ? 'border-green-400 bg-green-100 text-green-600'
+                  : 'border-ink-600 bg-white text-slate-600'
               }`}
             >
               <Icon className="h-2.5 w-2.5" />
@@ -266,13 +266,13 @@ export default function RequestDetail() {
         <div
           className={`rounded-xl border p-4 ${
             request.reason === 'TRANSFER_FAILED'
-              ? 'border-amber-400/25 bg-amber-400/[0.06]'
-              : 'border-rose-400/25 bg-rose-400/[0.06]'
+              ? 'border-amber-200 bg-amber-50'
+              : 'border-rose-200 bg-rose-50'
           }`}
         >
           <div className="flex flex-wrap items-center gap-2">
-            <Ban className={request.reason === 'TRANSFER_FAILED' ? 'h-4 w-4 text-amber-300' : 'h-4 w-4 text-rose-300'} />
-            <p className={`text-sm font-semibold ${request.reason === 'TRANSFER_FAILED' ? 'text-amber-200' : 'text-rose-200'}`}>
+            <Ban className={request.reason === 'TRANSFER_FAILED' ? 'h-4 w-4 text-amber-700' : 'h-4 w-4 text-rose-600'} />
+            <p className={`text-sm font-semibold ${request.reason === 'TRANSFER_FAILED' ? 'text-amber-800' : 'text-rose-700'}`}>
               {reasonInfo.label}
             </p>
             <ReasonBadge reason={request.reason} />
@@ -281,10 +281,10 @@ export default function RequestDetail() {
           <p className="mt-1 text-[11px] text-slate-500">Agent guidance: {reasonInfo.hint}</p>
         </div>
       ) : request.status === 'PENDING_APPROVAL' ? (
-        <div className="rounded-xl border border-amber-400/25 bg-amber-400/[0.06] p-4">
+        <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
           <div className="flex items-center gap-2">
-            <Clock3 className="h-4 w-4 text-amber-300" />
-            <p className="text-sm font-semibold text-amber-200">Waiting for owner co-sign</p>
+            <Clock3 className="h-4 w-4 text-amber-700" />
+            <p className="text-sm font-semibold text-amber-800">Waiting for owner co-sign</p>
           </div>
           <p className="mt-1 text-xs text-slate-400">
             The policy allows the payee and the amount, but this request is above the co-sign
@@ -292,10 +292,10 @@ export default function RequestDetail() {
           </p>
         </div>
       ) : (
-        <div className="rounded-xl border border-emerald-400/20 bg-emerald-400/[0.05] p-4">
+        <div className="rounded-xl border border-green-200 bg-green-50 p-4">
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="h-4 w-4 text-emerald-300" />
-            <p className="text-sm font-semibold text-emerald-200">
+            <CheckCircle2 className="h-4 w-4 text-green-700" />
+            <p className="text-sm font-semibold text-green-700">
               {request.status === 'COMPLETED' ? 'Settled within policy' : 'Approved within policy'}
             </p>
           </div>
@@ -306,7 +306,7 @@ export default function RequestDetail() {
         </div>
       )}
 
-      <div className="grid gap-5 xl:grid-cols-[1.5fr_1fr]">
+      <div className="grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
         <div className="space-y-5">
           <Panel className="p-5">
             <SectionTitle title="Payment details" />
@@ -330,7 +330,7 @@ export default function RequestDetail() {
                 {request.agentName ? (
                   <Link
                     to={`/app/agents/${encodeURIComponent(request.agentPublicKey)}`}
-                    className="text-sky-300 hover:text-sky-200"
+                    className="text-green-600 hover:text-green-700"
                   >
                     {request.agentName}
                   </Link>
@@ -364,7 +364,7 @@ export default function RequestDetail() {
                 </KeyValue>
               </dl>
               {simulated ? (
-                <div className="mt-3 flex items-start gap-2 rounded-lg border border-amber-400/20 bg-amber-400/[0.06] p-3 text-[11px] text-amber-200">
+                <div className="mt-3 flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3 text-[11px] text-amber-800">
                   <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" />
                   <span>
                     This deposit address begins with <code className="font-mono">sim-local-</code> and
@@ -372,8 +372,8 @@ export default function RequestDetail() {
                   </span>
                 </div>
               ) : (
-                <div className="mt-3 flex items-start gap-2 rounded-lg border border-white/[0.07] bg-white/[0.02] p-3 text-[11px] text-slate-500">
-                  <Globe2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-violet-300" />
+                <div className="mt-3 flex items-start gap-2 rounded-lg border border-ink-700 bg-ink-850 p-3 text-[11px] text-slate-500">
+                  <Globe2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-violet-600" />
                   <span>
                     Cross-chain delivery is performed by NEAR Intents solvers, not by the vault
                     contract. The contract enforces the policy and records the reference; it does
@@ -394,7 +394,7 @@ export default function RequestDetail() {
               }
             />
             {showRaw ? (
-              <pre className="max-h-80 overflow-auto rounded-lg border border-white/[0.07] bg-ink-950/70 p-3 font-mono text-[11px] leading-relaxed text-slate-400">
+              <pre className="max-h-80 overflow-auto rounded-lg border border-ink-700 bg-mist p-3 font-mono text-[11px] leading-relaxed text-slate-400">
 {JSON.stringify(request, null, 2)}
               </pre>
             ) : (
@@ -427,7 +427,7 @@ export default function RequestDetail() {
               <KeyValue label="Tx hash">
                 {request.txHash ? (
                   txUrl ? (
-                    <a href={txUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-sky-300 hover:text-sky-200">
+                    <a href={txUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-green-600 hover:text-green-700">
                       <span className="mono">{truncateMiddle(request.txHash, 12, 8)}</span>
                       <ExternalLink className="h-3 w-3" />
                     </a>
@@ -486,7 +486,7 @@ export default function RequestDetail() {
           title="More from this agent"
           actions={
             request.agentName ? (
-              <Link to={`/app/agents/${encodeURIComponent(request.agentPublicKey)}`} className="text-xs text-sky-300 hover:text-sky-200">
+              <Link to={`/app/agents/${encodeURIComponent(request.agentPublicKey)}`} className="text-xs text-green-600 hover:text-green-700">
                 Open agent
               </Link>
             ) : null
@@ -500,7 +500,7 @@ export default function RequestDetail() {
         />
       </Panel>
 
-      <div className="flex items-start gap-2 rounded-xl border border-white/[0.07] bg-white/[0.02] p-3.5 text-[11px] text-slate-500">
+      <div className="flex items-start gap-2 rounded-xl border border-ink-700 bg-ink-850 p-3.5 text-[11px] text-slate-500">
         <Fingerprint className="mt-0.5 h-3.5 w-3.5 shrink-0 text-slate-400" />
         <span>
           The contract is the source of truth. This page renders the API read model, which replays
@@ -516,7 +516,7 @@ export default function RequestDetail() {
       </div>
 
       {request.status === 'PENDING_APPROVAL' && !isLocal ? (
-        <div className="flex items-start gap-2 rounded-xl border border-sky-400/20 bg-sky-400/[0.05] p-3.5 text-[11px] text-sky-200">
+        <div className="flex items-start gap-2 rounded-xl border border-green-200 bg-green-50 p-3.5 text-[11px] text-green-700">
           <TriangleAlert className="mt-0.5 h-3.5 w-3.5 shrink-0" />
           Real vault: approval is an owner-signed transaction. Connect your wallet to sign it; this
           page never sees the key.

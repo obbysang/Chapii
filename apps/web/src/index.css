@@ -2,14 +2,35 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * AgentVault design tokens.
+ *
+ * Brand: green #22c55e is the identity color, orange #f97316 is reserved
+ * for hover, focus and rare highlights. White is the base surface; all
+ * neutrals carry a slight green tint. Change the values here and the
+ * whole app follows — do not hardcode brand colors in components.
+ */
 :root {
-  color-scheme: dark;
-  --bg: #070b12;
-  --panel: #0b1220;
-  --panel-2: #0f172a;
-  --border: rgba(148, 163, 184, 0.14);
-  --text: #e2e8f0;
-  --muted: #94a3b8;
+  color-scheme: light;
+  --bg: #ffffff;
+  --panel: #ffffff;
+  --panel-soft: #f4f8f5;
+  --well: #f2f6f3;
+  --border: #d7e1da;
+  --border-strong: #c2d0c6;
+  --text: #131e17;
+  --text-soft: #37493d;
+  --muted: #5f7266;
+  --faint: #6e8175;
+  --primary: #22c55e;
+  --primary-hover: #f97316;
+  /* Near-black on green-500/orange-500 passes WCAG AA with huge margin;
+   * white on those fills does not, so filled buttons always use this. */
+  --primary-fg: #0b120d;
+  --ring: #22c55e;
+  --danger: #e11d48;
+  --radius-btn: 0.625rem;
+  --radius-panel: 1rem;
 }
 
 html,
@@ -21,21 +42,27 @@ body,
 body {
   margin: 0;
   background:
-    radial-gradient(1000px 500px at 15% -10%, rgba(96, 165, 250, 0.09), transparent 60%),
-    radial-gradient(800px 400px at 95% 0%, rgba(167, 139, 250, 0.08), transparent 55%),
+    radial-gradient(900px 420px at 12% -8%, rgba(34, 197, 94, 0.06), transparent 60%),
     var(--bg);
   color: var(--text);
   font-family: Inter, ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
+/* Headings wear the display face everywhere from this single rule. */
+h1,
+h2,
+h3 {
+  font-family: 'Space Grotesk', Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
 ::selection {
-  background: rgba(96, 165, 250, 0.35);
+  background: #bbf7d0;
 }
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: #24324a transparent;
+  scrollbar-color: #c2d0c6 transparent;
 }
 
 *::-webkit-scrollbar {
@@ -44,7 +71,7 @@ body {
 }
 
 *::-webkit-scrollbar-thumb {
-  background: #24324a;
+  background: #c2d0c6;
   border-radius: 999px;
 }
 
@@ -61,28 +88,80 @@ textarea {
 
 @layer components {
   .panel {
-    @apply rounded-2xl border border-white/10 bg-ink-900/80 shadow-card backdrop-blur;
+    @apply rounded-2xl border bg-white shadow-card;
+    border-color: var(--border);
   }
   .panel-soft {
-    @apply rounded-xl border border-white/10 bg-white/[0.025];
+    @apply rounded-xl border border-transparent;
+    background: var(--panel-soft);
   }
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-white/10 bg-white/[0.04] px-3.5 py-2 text-sm font-medium text-slate-200 transition hover:bg-white/[0.08] focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/70 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex items-center justify-center gap-2 border px-3.5 py-2 text-sm font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white disabled:cursor-not-allowed disabled:opacity-50;
+    border-radius: var(--radius-btn);
+    border-color: var(--border-strong);
+    background: #ffffff;
+    color: var(--text-soft);
+  }
+  .btn:hover {
+    background: var(--panel-soft);
+    border-color: var(--faint);
+  }
+  .btn:focus-visible {
+    --tw-ring-color: rgb(34 197 94 / 0.55);
   }
   .btn-primary {
-    @apply btn border-sky-400/30 bg-sky-500/90 text-ink-950 hover:bg-sky-400;
+    @apply btn border-transparent;
+    background: var(--primary);
+    color: var(--primary-fg);
+    font-weight: 600;
+  }
+  /* Green by default, orange on hover — the one place the accent color
+   * is guaranteed to appear. Near-black text keeps contrast on both. */
+  .btn-primary:hover {
+    background: var(--primary-hover);
+    border-color: transparent;
+    color: var(--primary-fg);
+  }
+  .btn-primary:focus-visible {
+    --tw-ring-color: rgb(249 115 22 / 0.6);
   }
   .btn-danger {
-    @apply btn border-rose-400/30 bg-rose-500/15 text-rose-200 hover:bg-rose-500/25;
+    @apply btn;
+    border-color: #fecdd3;
+    background: #fff1f2;
+    color: #be123c;
+  }
+  .btn-danger:hover {
+    background: #ffe4e6;
+    border-color: #fda4af;
+  }
+  .btn-danger:focus-visible {
+    --tw-ring-color: rgb(225 29 72 / 0.45);
   }
   .btn-ghost {
-    @apply btn border-transparent bg-transparent text-slate-300 hover:bg-white/[0.06];
+    @apply btn border-transparent bg-transparent;
+    color: var(--text-soft);
+  }
+  .btn-ghost:hover {
+    background: var(--panel-soft);
   }
   .input {
-    @apply w-full rounded-lg border border-white/10 bg-ink-950/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:border-sky-400/60 focus:outline-none focus:ring-2 focus:ring-sky-400/20;
+    @apply w-full border px-3 py-2 text-sm transition focus:outline-none focus:ring-4;
+    border-radius: var(--radius-btn);
+    border-color: var(--border-strong);
+    background: #ffffff;
+    color: var(--text);
+  }
+  .input::placeholder {
+    color: var(--faint);
+  }
+  .input:focus {
+    border-color: var(--primary);
+    --tw-ring-color: rgb(34 197 94 / 0.14);
   }
   .label {
-    @apply mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-400;
+    @apply mb-1.5 block text-xs font-semibold uppercase tracking-wide;
+    color: var(--muted);
   }
   .chip {
     @apply inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold;
@@ -91,7 +170,11 @@ textarea {
     @apply font-mono text-[13px];
   }
   .table-row {
-    @apply border-b border-white/[0.06] transition hover:bg-white/[0.025];
+    @apply border-b transition last:border-0;
+    border-color: rgba(215, 225, 218, 0.7);
+  }
+  .table-row:hover {
+    background: var(--panel-soft);
   }
 }
 
@@ -111,7 +194,7 @@ textarea {
 }
 
 .skeleton {
-  background: linear-gradient(90deg, rgba(148, 163, 184, 0.08), rgba(148, 163, 184, 0.16), rgba(148, 163, 184, 0.08));
+  background: linear-gradient(90deg, rgba(110, 129, 117, 0.1), rgba(110, 129, 117, 0.2), rgba(110, 129, 117, 0.1));
   background-size: 200% 100%;
   animation: shimmer 1.4s infinite;
 }

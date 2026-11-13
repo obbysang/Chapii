@@ -9,6 +9,7 @@ import {
   type TextareaHTMLAttributes,
 } from 'react';
 import { createPortal } from 'react-dom';
+import NumberFlow from '@number-flow/react';
 import { Check, ChevronDown, Copy, Inbox, Loader2, X } from 'lucide-react';
 import { cn, TONE_CLASS, copyText, requestLabel, requestTone, reasonTone, type Tone } from '../lib/utils';
 import { reasonLabel } from '@agentvault/shared';
@@ -41,14 +42,16 @@ export function SectionTitle({
     <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
       <div className="min-w-0">
         {eyebrow ? (
-          <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-sky-400/80">
+          <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-green-600">
             {eyebrow}
           </p>
         ) : null}
         <h2 className="text-lg font-semibold tracking-tight text-slate-100">{title}</h2>
         {subtitle ? <p className="mt-1 max-w-2xl text-sm text-slate-400">{subtitle}</p> : null}
       </div>
-      {actions ? <div className="flex shrink-0 items-center gap-2">{actions}</div> : null}
+      {actions ? (
+        <div className="flex max-w-full flex-wrap items-center justify-end gap-2">{actions}</div>
+      ) : null}
     </div>
   );
 }
@@ -124,8 +127,8 @@ export function EmptyState({
   icon?: ReactNode;
 }) {
   return (
-    <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-white/10 px-6 py-12 text-center">
-      <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-slate-400">
+    <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-ink-700 px-6 py-12 text-center">
+      <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full border border-ink-700 bg-ink-850 text-slate-400">
         {icon ?? <Inbox className="h-5 w-5" />}
       </div>
       <p className="text-sm font-semibold text-slate-200">{title}</p>
@@ -148,13 +151,31 @@ export function Stat({
   tone?: Tone;
   icon?: ReactNode;
 }) {
+  // Animate plain numeric stats (balances, counts) with NumberFlow; pass
+  // anything else — ratios like "2/3", dashes, strings — straight through.
+  const numericValue = (() => {
+    if (typeof value !== 'string') return null;
+    const trimmed = value.trim();
+    const match = /^-?(\d+)(?:\.(\d+))?$/.exec(trimmed);
+    if (!match) return null;
+    return { value: Number(trimmed), decimals: match[2]?.length ?? 0 };
+  })();
   return (
     <div className="panel-soft p-4">
       <div className="flex items-center justify-between gap-2">
         <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">{label}</p>
-        {icon ? <span className={cn('text-slate-400', tone === 'green' && 'text-emerald-400', tone === 'red' && 'text-rose-400', tone === 'amber' && 'text-amber-400', tone === 'blue' && 'text-sky-400')}>{icon}</span> : null}
+        {icon ? <span className={cn('text-slate-400', tone === 'green' && 'text-green-600', tone === 'red' && 'text-rose-600', tone === 'amber' && 'text-amber-600', tone === 'blue' && 'text-slate-500')}>{icon}</span> : null}
       </div>
-      <p className="mt-2 text-2xl font-semibold tracking-tight text-slate-100">{value}</p>
+      <p className="mt-2 text-2xl font-semibold tracking-tight text-slate-100 tabular-nums">
+        {numericValue !== null ? (
+          <NumberFlow
+            value={numericValue.value}
+            format={{ useGrouping: false, minimumFractionDigits: numericValue.decimals, maximumFractionDigits: Math.max(numericValue.decimals, 8) }}
+          />
+        ) : (
+          value
+        )}
+      </p>
       {hint ? <p className="mt-1 text-xs text-slate-500">{hint}</p> : null}
     </div>
   );
@@ -170,13 +191,13 @@ export function ProgressBar({
   className?: string;
 }) {
   const colors = {
-    blue: 'bg-sky-400',
-    green: 'bg-emerald-400',
-    red: 'bg-rose-400',
-    amber: 'bg-amber-400',
+    blue: 'bg-green-500',
+    green: 'bg-green-500',
+    red: 'bg-rose-500',
+    amber: 'bg-amber-500',
   } as const;
   return (
-    <div className={cn('h-1.5 w-full overflow-hidden rounded-full bg-white/[0.06]', className)}>
+    <div className={cn('h-1.5 w-full overflow-hidden rounded-full bg-ink-800', className)}>
       <div
         className={cn('h-full rounded-full transition-all duration-500', colors[tone])}
         style={{ width: `${Math.max(0, Math.min(100, value))}%` }}
@@ -209,12 +230,12 @@ export function CopyButton({
         });
       }}
       className={cn(
-        'inline-flex items-center gap-1.5 rounded-md border border-white/10 bg-white/[0.03] text-xs text-slate-400 transition hover:border-white/20 hover:text-slate-200',
+        'inline-flex items-center gap-1.5 rounded-md border border-ink-700 bg-ink-850 text-xs text-slate-400 transition hover:border-ink-600 hover:text-slate-200',
         compact ? 'p-1.5' : 'px-2 py-1',
         className,
       )}
     >
-      {copied ? <Check className="h-3 w-3 text-emerald-400" /> : <Copy className="h-3 w-3" />}
+      {copied ? <Check className="h-3 w-3 text-green-600" /> : <Copy className="h-3 w-3" />}
       {compact ? null : <span>{copied ? 'Copied' : (label ?? 'Copy')}</span>}
     </button>
   );
@@ -283,7 +304,7 @@ export function Field({
       <span className="label">{label}</span>
       {children}
       {error ? (
-        <span className="mt-1 block text-xs text-rose-300">{error}</span>
+        <span className="mt-1 block text-xs text-rose-600">{error}</span>
       ) : hint ? (
         <span className="mt-1 block text-xs text-slate-500">{hint}</span>
       ) : null}
@@ -308,7 +329,7 @@ export function Toggle({
       role="switch"
       aria-checked={checked}
       onClick={() => onChange(!checked)}
-      className="flex w-full items-center justify-between gap-4 rounded-xl border border-white/10 bg-white/[0.02] p-4 text-left transition hover:bg-white/[0.04]"
+      className="flex w-full items-center justify-between gap-4 rounded-xl border border-ink-700 bg-ink-850 p-4 text-left transition hover:bg-ink-800"
     >
       <span>
         <span className="block text-sm font-medium text-slate-200">{label}</span>
@@ -317,7 +338,7 @@ export function Toggle({
       <span
         className={cn(
           'relative h-6 w-11 shrink-0 rounded-full border transition',
-          checked ? 'border-sky-400/50 bg-sky-500/80' : 'border-white/10 bg-white/10',
+          checked ? 'border-green-600 bg-green-500' : 'border-ink-600 bg-ink-700',
         )}
       >
         <span
@@ -360,7 +381,7 @@ export function Modal({
   if (!open) return null;
   return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-modal flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) onClose();
       }}
@@ -405,7 +426,7 @@ export function Tabs<T extends string>({
   onChange: (id: T) => void;
 }) {
   return (
-    <div className="flex flex-wrap gap-1 rounded-lg border border-white/10 bg-white/[0.02] p-1">
+    <div className="flex flex-wrap gap-1 rounded-lg border border-ink-700 bg-ink-850 p-1">
       {tabs.map((tab) => (
         <button
           key={tab.id}
@@ -414,13 +435,13 @@ export function Tabs<T extends string>({
           className={cn(
             'inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition',
             value === tab.id
-              ? 'bg-white/[0.08] text-slate-100'
+              ? 'bg-ink-700 text-slate-100'
               : 'text-slate-400 hover:text-slate-200',
           )}
         >
           {tab.label}
           {tab.count !== undefined ? (
-            <span className="rounded-full bg-white/[0.06] px-1.5 text-[10px] text-slate-400">
+            <span className="rounded-full bg-ink-800 px-1.5 text-[10px] text-slate-400">
               {tab.count}
             </span>
           ) : null}
@@ -440,7 +461,7 @@ export function KeyValue({
   mono?: boolean;
 }) {
   return (
-    <div className="flex flex-col gap-1 border-b border-white/[0.05] py-2.5 last:border-0 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+    <div className="flex flex-col gap-1 border-b border-ink-700/70 py-2.5 last:border-0 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
       <dt className="text-xs uppercase tracking-wide text-slate-500">{label}</dt>
       <dd className={cn('min-w-0 text-sm text-slate-200 sm:text-right', mono && 'mono break-all')}>
         {children}

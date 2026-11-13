@@ -216,7 +216,7 @@ export function PolicyEditor({
           {form.limits.map((limit, index) => (
             <div
               key={`${limit.asset}-${index}`}
-              className="rounded-xl border border-white/10 bg-white/[0.02] p-3"
+              className="rounded-xl border border-ink-700 bg-ink-850 p-3"
             >
               <div className="mb-2 flex items-center gap-2">
                 <Select
@@ -243,7 +243,7 @@ export function PolicyEditor({
                         limits: current.limits.filter((_, i) => i !== index),
                       }))
                     }
-                    className="ml-auto rounded p-1.5 text-slate-500 transition hover:text-rose-300"
+                    className="ml-auto rounded p-1.5 text-slate-500 transition hover:text-rose-600"
                     aria-label="Remove asset limit"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
@@ -299,14 +299,14 @@ export function PolicyEditor({
           </Button>
         </div>
         {form.payees.length === 0 ? (
-          <div className="rounded-lg border border-amber-400/20 bg-amber-400/[0.06] p-3 text-xs text-amber-200">
+          <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-800">
             An agent with no allowlisted payees can only ever produce blocked requests. Add at
             least one recipient before the agent goes live.
           </div>
         ) : null}
         <div className="space-y-2.5">
           {form.payees.map((payee, index) => (
-            <div key={index} className="rounded-xl border border-white/10 bg-white/[0.02] p-3">
+            <div key={index} className="rounded-xl border border-ink-700 bg-ink-850 p-3">
               <div className="mb-2 flex items-center gap-2">
                 <Input
                   value={payee.label}
@@ -334,7 +334,7 @@ export function PolicyEditor({
                       payees: current.payees.filter((_, i) => i !== index),
                     }))
                   }
-                  className="ml-auto rounded p-1.5 text-slate-500 transition hover:text-rose-300"
+                  className="ml-auto rounded p-1.5 text-slate-500 transition hover:text-rose-600"
                   aria-label="Remove payee"
                 >
                   <Trash2 className="h-3.5 w-3.5" />
@@ -380,13 +380,13 @@ export function PolicyEditor({
       </div>
 
       {builtError ? (
-        <div className="flex items-start gap-2 rounded-lg border border-rose-400/25 bg-rose-400/[0.07] p-3 text-xs text-rose-200">
+        <div className="flex items-start gap-2 rounded-lg border border-rose-200 bg-rose-100 p-3 text-xs text-rose-700">
           <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0" />
           <span>{builtError}</span>
         </div>
       ) : summary ? (
-        <div className="rounded-lg border border-sky-400/15 bg-sky-400/[0.05] p-3">
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-sky-300/80">
+        <div className="rounded-lg border border-green-200 bg-green-50 p-3">
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-green-600">
             Plain-English policy
           </p>
           <p className="mt-1 text-xs leading-relaxed text-slate-300">{summary}</p>

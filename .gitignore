@@ -18,3 +18,8 @@ Thumbs.db
 .vite/
 playwright-report/
 test-results/
+
+# Local agent tooling (skills + MCP servers) used while building this project.
+# Not part of the submission.
+.opencode/
+opencode.json

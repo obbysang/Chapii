@@ -91,7 +91,7 @@ export default function Requests() {
       </div>
 
       <Panel className="p-4">
-        <div className="grid gap-3 md:grid-cols-[1fr_200px_200px_auto]">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-[minmax(0,1fr)_200px_200px_auto]">
           <div className="relative">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
             <Input
@@ -142,7 +142,7 @@ export default function Requests() {
               : `${requests.length} receipt(s)${activeFilters ? ' matching filters' : ''}`
           }
           actions={
-            <span className={cn('text-[11px]', requestsQuery.isError ? 'text-rose-300' : 'text-slate-500')}>
+            <span className={cn('text-[11px]', requestsQuery.isError ? 'text-rose-600' : 'text-slate-500')}>
               {requestsQuery.isError ? 'Could not load requests' : 'newest first'}
             </span>
           }
@@ -198,7 +198,7 @@ export default function Requests() {
 
       <p className="px-1 text-[11px] leading-relaxed text-slate-500">
         Rows come from the API&apos;s read model, which is backed by the chain. Local mode uses the
-        deterministic simulator. In NEAR mode the indexer advances with <code className="rounded bg-white/[0.05] px-1 font-mono">get_changes_since</code>.
+        deterministic simulator. In NEAR mode the indexer advances with <code className="rounded bg-ink-800 px-1 font-mono">get_changes_since</code>.
       </p>
     </div>
   );

@@ -14,7 +14,6 @@ import {
   Users,
 } from 'lucide-react';
 import type { Policy } from '@agentvault/shared';
-import { KeyPair } from 'near-api-js';
 import { api } from '../lib/api';
 import { useVault } from '../state/vault';
 import { useToast } from '../state/toast';
@@ -118,16 +117,16 @@ function AgentCard({
 
   return (
     <Panel className="overflow-hidden">
-      <div className="flex items-start justify-between gap-3 border-b border-white/[0.06] p-4">
+      <div className="flex items-start justify-between gap-3 border-b border-ink-700 p-4">
         <div className="flex min-w-0 items-start gap-3">
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/[0.03] text-xs font-semibold text-slate-300">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-ink-700 bg-ink-850 text-xs font-semibold text-slate-300">
             {agent.name.slice(0, 1).toUpperCase()}
           </span>
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
               <Link
                 to={`/app/agents/${encodeURIComponent(agent.publicKey)}`}
-                className="truncate text-sm font-semibold text-slate-100 hover:text-sky-200"
+                className="truncate text-sm font-semibold text-slate-100 hover:text-green-700"
               >
                 {agent.name}
               </Link>
@@ -167,19 +166,19 @@ function AgentCard({
             Guardrails
           </p>
           <div className="flex flex-wrap gap-1.5">
-            <span className="chip border-white/10 bg-white/[0.04] text-slate-400">
+            <span className="chip border-ink-700 bg-ink-800 text-slate-400">
               {agent.policy.payees.length} payees
             </span>
-            <span className="chip border-white/10 bg-white/[0.04] text-slate-400">
+            <span className="chip border-ink-700 bg-ink-800 text-slate-400">
               {agent.policy.max_requests_per_hour}/hr
             </span>
             {agent.policy.freeze_after_violations > 0 ? (
-              <span className="chip border-amber-400/20 bg-amber-400/[0.06] text-amber-300">
+              <span className="chip border-amber-200 bg-amber-50 text-amber-700">
                 freeze @ {agent.policy.freeze_after_violations}
               </span>
             ) : null}
             {agent.policy.expires_at_ns ? (
-              <span className="chip border-white/10 bg-white/[0.04] text-slate-400">
+              <span className="chip border-ink-700 bg-ink-800 text-slate-400">
                 expires {shortDate(new Date(agent.policy.expires_at_ns / 1_000_000).toISOString())}
               </span>
             ) : null}
@@ -187,7 +186,7 @@ function AgentCard({
         </div>
       </div>
 
-      <div className="border-t border-white/[0.06] p-4">
+      <div className="border-t border-ink-700 p-4">
         {budgetQuery.isLoading ? (
           <Skeleton className="h-10" />
         ) : budgetQuery.data ? (
@@ -224,7 +223,7 @@ function AgentCard({
                 ) : agent.status === 'FROZEN' ? (
                   <Button
                     variant="ghost"
-                    className="px-2 py-1 text-[11px] text-emerald-300"
+                    className="px-2 py-1 text-[11px] text-green-700"
                     onClick={() => act.mutate('unfreeze')}
                     disabled={act.isPending}
                   >
@@ -251,7 +250,7 @@ function AgentCard({
 
       <Link
         to={`/app/agents/${encodeURIComponent(agent.publicKey)}`}
-        className="flex items-center justify-between border-t border-white/[0.06] px-4 py-2.5 text-[11px] text-slate-400 transition hover:bg-white/[0.03] hover:text-slate-200"
+        className="flex items-center justify-between border-t border-ink-700 px-4 py-2.5 text-[11px] text-slate-400 transition hover:bg-ink-850 hover:text-slate-200"
       >
         Policy, receipts and key scope <ArrowRight className="h-3.5 w-3.5" />
       </Link>
@@ -271,7 +270,7 @@ function AgentCard({
           </>
         }
       >
-        <div className="flex items-start gap-2 rounded-lg border border-rose-400/25 bg-rose-400/[0.07] p-3 text-xs text-rose-200">
+        <div className="flex items-start gap-2 rounded-lg border border-rose-200 bg-rose-100 p-3 text-xs text-rose-700">
           <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
           <span>
             Revocation is permanent on-chain. The key can no longer call the vault, and it cannot be
@@ -327,6 +326,7 @@ function AddAgentModal({
         setResult({ publicKey: created.publicKey, privateKey: created.privateKey });
       } else {
         if (!wallet.accountId) await wallet.connect({ contractId: vaultId });
+        const { KeyPair } = await import('near-api-js');
         const key = KeyPair.fromRandom('ed25519');
         const publicKey = key.getPublicKey().toString();
         const privateKey = key.toString();
@@ -384,7 +384,7 @@ function AddAgentModal({
     >
       {result ? (
         <div className="space-y-4">
-          <div className="flex items-start gap-2 rounded-lg border border-amber-400/25 bg-amber-400/[0.07] p-3 text-xs text-amber-200">
+          <div className="flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-100 p-3 text-xs text-amber-800">
             <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
             <span>
               The private key is shown once and is never stored by the server. Put it in the agent
@@ -393,7 +393,7 @@ function AddAgentModal({
           </div>
           <div>
             <p className="label">Agent public key</p>
-            <div className="flex items-center gap-2 rounded-lg border border-white/10 bg-ink-950/70 p-2.5">
+            <div className="flex items-center gap-2 rounded-lg border border-ink-700 bg-mist p-2.5">
               <code className="mono min-w-0 flex-1 break-all text-xs text-slate-300">{result.publicKey}</code>
               <Button variant="ghost" className="px-2 py-1 text-[11px]" onClick={() => void copyText(result.publicKey)}>
                 Copy
@@ -402,11 +402,11 @@ function AddAgentModal({
           </div>
           <div>
             <p className="label">Agent private key (secret)</p>
-            <div className="flex items-center gap-2 rounded-lg border border-rose-400/20 bg-rose-950/30 p-2.5">
-              <code className="mono min-w-0 flex-1 break-all text-xs text-rose-200">{result.privateKey}</code>
+            <div className="flex items-center gap-2 rounded-lg border border-rose-200 bg-rose-50 p-2.5">
+              <code className="mono min-w-0 flex-1 break-all text-xs text-rose-700">{result.privateKey}</code>
               <Button
                 variant="ghost"
-                className="px-2 py-1 text-[11px] text-rose-200"
+                className="px-2 py-1 text-[11px] text-rose-700"
                 onClick={() =>
                   void copyText(result.privateKey).then((ok) => ok && toast.success('Private key copied'))
                 }
@@ -419,7 +419,7 @@ function AddAgentModal({
       ) : (
         <div className="space-y-4">
           {!isLocal ? (
-            <div className="flex items-start gap-2 rounded-lg border border-sky-400/20 bg-sky-400/[0.06] p-3 text-xs text-sky-200">
+            <div className="flex items-start gap-2 rounded-lg border border-green-200 bg-green-50 p-3 text-xs text-green-700">
               <Fingerprint className="mt-0.5 h-4 w-4 shrink-0" />
               <span>
                 This is a real vault. The key pair is generated in your browser and only the public
@@ -475,8 +475,8 @@ export default function Agents() {
         </Button>
       </div>
 
-      <div className="flex items-start gap-2 rounded-xl border border-white/[0.07] bg-white/[0.02] p-3.5 text-[11px] leading-relaxed text-slate-500">
-        <Users className="mt-0.5 h-4 w-4 shrink-0 text-sky-300" />
+      <div className="flex items-start gap-2 rounded-xl border border-ink-700 bg-ink-850 p-3.5 text-[11px] leading-relaxed text-slate-500">
+        <Users className="mt-0.5 h-4 w-4 shrink-0 text-green-600" />
         <span>
           {isLocal
             ? 'Local simulator: the server generates the key pair and returns the private key once. This is a demo-only exception; production agents generate keys client-side.'

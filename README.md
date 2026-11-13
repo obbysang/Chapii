@@ -174,8 +174,8 @@ packages/
 apps/
   api/                   Fastify + Prisma + Postgres, indexer, SSE, executor, harness
   web/                   React + Vite dashboard, wallet selector, owner console
-scripts/                 contract build, testnet deploy, vault lock
-docs/                    architecture, threat model, API, decisions
+scripts/                 contract build, testnet/mainnet deploy, vault lock
+docs/                    architecture, threat model, API, MCP, SDK, limitations, decisions
 ```
 
 ## Tests and checks
@@ -183,11 +183,13 @@ docs/                    architecture, threat model, API, decisions
 ```bash
 pnpm build          # every package and app
 pnpm typecheck      # strict TypeScript, no emit
+pnpm lint           # per-workspace type check
 pnpm test           # unit tests
 pnpm harness        # 34-scenario red-team suite
 ```
 
-The contract is built and tested with Rust:
+The contract is built and tested with Rust (needs rustc ≥ 1.95, the MSRV of
+near-sdk 5.30; the Docker path pins the toolchain for you):
 
 ```bash
 pnpm contract:build   # dockerized wasm build + cargo test, exports build/contracts
@@ -238,7 +240,11 @@ See [docs/threat-model.md](docs/threat-model.md) for the full table, including r
 - [docs/architecture.md](docs/architecture.md) — components, data flows, trust boundaries.
 - [docs/threat-model.md](docs/threat-model.md) — threats, mitigations, residual risk.
 - [docs/api.md](docs/api.md) — REST and SSE reference.
+- [docs/mcp.md](docs/mcp.md) — MCP server tools, modes, client wiring.
+- [docs/sdk.md](docs/sdk.md) — TypeScript SDK usage, amounts, assets.
+- [docs/limitations.md](docs/limitations.md) — the known gaps, stated plainly.
 - [docs/DECISIONS.md](docs/DECISIONS.md) — architecture decisions and trade-offs.
+- [docs/SUBMISSION_CHECKLIST.md](docs/SUBMISSION_CHECKLIST.md) — what a judge should verify.
 - [HACKATHON_NOTES.md](HACKATHON_NOTES.md) — demo script, submission checklist, disclosure.
 
 ## Disclosure

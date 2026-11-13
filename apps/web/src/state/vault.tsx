@@ -48,6 +48,9 @@ export function VaultProvider({ children }: { children: ReactNode }) {
   const [lastEvent, setLastEvent] = useState<VaultEvent | null>(null);
   const sequence = useRef(0);
   const invalidationTimer = useRef<number | undefined>(undefined);
+  // Events arrive in bursts (chain.event, request.created, vault.updated). The
+  // debounced flush must remember every kind it saw, not just the last one.
+  const dirty = useRef({ requests: false, agents: false, harness: false });
 
   const healthQuery = useQuery({
     queryKey: ['health'],
@@ -109,20 +112,34 @@ export function VaultProvider({ children }: { children: ReactNode }) {
         sequence.current += 1;
         setLastEvent({ ...event, receivedAt: Date.now(), sequence: sequence.current });
 
+        // `chain.event` and `vault.updated` always accompany a payment in the
+        // simulator, so treat them as request-affecting too.
+        if (
+          event.event.startsWith('request') ||
+          event.event === 'chain.event' ||
+          event.event === 'vault.updated'
+        ) {
+          dirty.current.requests = true;
+        }
+        if (event.event === 'agent.updated') dirty.current.agents = true;
+        if (event.event.startsWith('harness')) dirty.current.harness = true;
+
         window.clearTimeout(invalidationTimer.current);
         invalidationTimer.current = window.setTimeout(() => {
+          const flush = dirty.current;
+          dirty.current = { requests: false, agents: false, harness: false };
           void queryClient.invalidateQueries({ queryKey: ['vault', vaultId] });
           void queryClient.invalidateQueries({ queryKey: ['vaults'] });
-          if (event.event.startsWith('request')) {
+          if (flush.requests) {
             void queryClient.invalidateQueries({ queryKey: ['requests', vaultId] });
             void queryClient.invalidateQueries({ queryKey: ['request', vaultId] });
             void queryClient.invalidateQueries({ queryKey: ['approvals', vaultId] });
           }
-          if (event.event === 'agent.updated') {
+          if (flush.agents) {
             void queryClient.invalidateQueries({ queryKey: ['agents', vaultId] });
             void queryClient.invalidateQueries({ queryKey: ['budget', vaultId] });
           }
-          if (event.event.startsWith('harness')) {
+          if (flush.harness) {
             void queryClient.invalidateQueries({ queryKey: ['harnessRuns', vaultId] });
           }
         }, 300);

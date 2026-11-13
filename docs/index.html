@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AgentVault documentation</title>
+    <style>
+      :root { color-scheme: dark; }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        padding: 3rem 1.25rem 5rem;
+        background: #070b12;
+        color: #e2e8f0;
+        font: 16px/1.6 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      }
+      main { max-width: 46rem; margin: 0 auto; }
+      a { color: #7dd3fc; text-decoration: none; }
+      a:hover { text-decoration: underline; }
+      h1 { margin: 0 0 .4rem; font-size: 1.7rem; letter-spacing: -.02em; }
+      p.lead { margin: 0 0 2.2rem; color: #94a3b8; }
+      ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .6rem; }
+      li {
+        padding: .9rem 1.1rem;
+        border: 1px solid rgba(148, 163, 184, .16);
+        border-radius: .7rem;
+        background: #0b1220;
+      }
+      li strong { display: block; color: #f1f5f9; font-size: .95rem; }
+      li span { color: #94a3b8; font-size: .85rem; }
+      footer { margin-top: 2.5rem; color: #64748b; font-size: .8rem; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>AgentVault documentation</h1>
+      <p class="lead">Plain-text docs served next to the app. Start with the README for the quick start.</p>
+      <ul>
+        <li><a href="README.md"><strong>README</strong><span>Index and reading order for reviewers.</span></a></li>
+        <li><a href="architecture.md"><strong>Architecture</strong><span>How the pieces fit together and the two runtime modes.</span></a></li>
+        <li><a href="threat-model.md"><strong>Threat model</strong><span>What can go wrong and which control stops it.</span></a></li>
+        <li><a href="api.md"><strong>API reference</strong><span>Every endpoint, SSE stream, shape and error code.</span></a></li>
+        <li><a href="mcp.md"><strong>MCP server</strong><span>Tools, modes and how to wire it into a client.</span></a></li>
+        <li><a href="sdk.md"><strong>TypeScript SDK</strong><span>Client usage, amounts and error handling.</span></a></li>
+        <li><a href="limitations.md"><strong>Limitations</strong><span>The known gaps, stated plainly.</span></a></li>
+        <li><a href="DECISIONS.md"><strong>Decisions</strong><span>Why Fastify, why a simulator, and other trade-offs.</span></a></li>
+        <li><a href="SUBMISSION_CHECKLIST.md"><strong>Submission checklist</strong><span>What the hackathon judge should verify.</span></a></li>
+      </ul>
+      <footer>MIT licensed. Local demo mode is a deterministic simulator, not a blockchain.</footer>
+    </main>
+  </body>
+</html>

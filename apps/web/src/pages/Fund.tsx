@@ -187,12 +187,12 @@ export default function Fund() {
         )}
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
         <Panel className="p-5">
           <SectionTitle
             title="Deposit"
             subtitle={isLocal ? 'Simulated deposit into the local vault.' : 'Send value to the vault account.'}
-            actions={<ArrowDownToLine className="h-4 w-4 text-emerald-300" />}
+            actions={<ArrowDownToLine className="h-4 w-4 text-green-700" />}
           />
           {isLocal ? (
             <div className="space-y-3">
@@ -225,7 +225,7 @@ export default function Fund() {
             </div>
           ) : (
             <div className="space-y-3">
-              <div className="rounded-lg border border-white/[0.07] bg-ink-950/60 p-3">
+              <div className="rounded-lg border border-ink-700 bg-mist p-3">
                 <p className="text-[10px] uppercase tracking-wider text-slate-500">Vault account</p>
                 <div className="mt-1 flex items-center gap-2">
                   <code className="mono min-w-0 flex-1 break-all text-xs text-slate-300">{vaultId}</code>
@@ -263,7 +263,7 @@ export default function Fund() {
           <SectionTitle
             title="Withdraw"
             subtitle="Owner-only. The agent key is rejected by assert_owner."
-            actions={<ArrowUpFromLine className="h-4 w-4 text-rose-300" />}
+            actions={<ArrowUpFromLine className="h-4 w-4 text-rose-600" />}
           />
           <div className="space-y-3">
             <Field label="Asset">
@@ -315,18 +315,18 @@ export default function Fund() {
         />
         {!intentsEnabled ? (
           <div className="space-y-3">
-            <div className="flex items-start gap-2 rounded-lg border border-white/[0.07] bg-white/[0.02] p-3.5 text-xs leading-relaxed text-slate-400">
-              <Info className="mt-0.5 h-4 w-4 shrink-0 text-violet-300" />
+            <div className="flex items-start gap-2 rounded-lg border border-ink-700 bg-ink-850 p-3.5 text-xs leading-relaxed text-slate-400">
+              <Info className="mt-0.5 h-4 w-4 shrink-0 text-violet-600" />
               <span>
                 Cross-chain funding is disabled. Set the following in the API environment to enable
                 1-Click quotes:
-                <code className="mx-1 rounded bg-black/30 px-1 py-0.5 font-mono text-[11px]">ONECLICK_API_URL</code>
+                <code className="mx-1 rounded bg-ink-800 px-1 py-0.5 font-mono text-[11px]">ONECLICK_API_URL</code>
                 and optionally
-                <code className="mx-1 rounded bg-black/30 px-1 py-0.5 font-mono text-[11px]">ONECLICK_JWT</code>.
+                <code className="mx-1 rounded bg-ink-800 px-1 py-0.5 font-mono text-[11px]">ONECLICK_JWT</code>.
                 Intents is mainnet-only; the local simulator never calls it.
               </span>
             </div>
-            <div className="rounded-lg border border-amber-400/20 bg-amber-400/[0.05] p-3 text-[11px] text-amber-200">
+            <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-[11px] text-amber-800">
               Honesty note: a cross-chain payout is not atomic with the NEAR decision. The vault
               records the policy decision and deposit reference; delivery depends on NEAR Intents
               solvers.
@@ -354,10 +354,10 @@ export default function Fund() {
                 Get 1-Click quote
               </Button>
             </div>
-            <div className="rounded-xl border border-white/[0.07] bg-ink-950/50 p-4">
+            <div className="rounded-xl border border-ink-700 bg-mist p-4">
               {quote ? (
                 <div className="space-y-2 text-xs">
-                  <div className="flex items-center gap-1.5 text-emerald-300">
+                  <div className="flex items-center gap-1.5 text-green-700">
                     <Check className="h-4 w-4" /> Quote received
                   </div>
                   <p className="text-[10px] uppercase tracking-wider text-slate-500">Deposit address</p>
@@ -381,7 +381,7 @@ export default function Fund() {
               ) : (
                 <div className="flex h-full min-h-[180px] flex-col items-center justify-center text-center">
                   {quoteMutation.isPending ? (
-                    <Loader2 className="h-5 w-5 animate-spin text-violet-300" />
+                    <Loader2 className="h-5 w-5 animate-spin text-violet-600" />
                   ) : (
                     <Globe2 className="h-5 w-5 text-slate-600" />
                   )}
@@ -414,21 +414,21 @@ export default function Fund() {
             Move <strong>{withdrawAmount} {symbolOf(withdrawAsset)}</strong> from the vault to{' '}
             <span className="mono text-slate-200">{withdrawTo || '—'}</span>?
           </p>
-          <div className="flex items-start gap-2 rounded-lg border border-amber-400/25 bg-amber-400/[0.07] p-3 text-xs text-amber-200">
+          <div className="flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-100 p-3 text-xs text-amber-800">
             <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
             <span>
               Withdrawals bypass agent policies but are still owner-signed. Double-check the
               recipient: on-chain transfers are irreversible.
             </span>
           </div>
-          <div className="flex items-center justify-between rounded-lg bg-white/[0.03] p-2.5 text-xs">
+          <div className="flex items-center justify-between rounded-lg bg-ink-850 p-2.5 text-xs">
             <span className="text-slate-500">Vault</span>
             <span className="mono text-slate-300">{truncateMiddle(vaultId, 18, 8)}</span>
           </div>
         </div>
       </Modal>
 
-      <div className={cn('rounded-xl border p-4 text-[11px] leading-relaxed', isLocal ? 'border-amber-400/20 bg-amber-400/[0.05] text-amber-200' : 'border-white/[0.07] bg-white/[0.02] text-slate-500')}>
+      <div className={cn('rounded-xl border p-4 text-[11px] leading-relaxed', isLocal ? 'border-amber-200 bg-amber-50 text-amber-800' : 'border-ink-700 bg-ink-850 text-slate-500')}>
         <span className="inline-flex items-center gap-1.5 font-semibold">
           <Wallet className="h-3.5 w-3.5" /> {isLocal ? 'Simulator mode' : 'Real funds'}
         </span>{' '}

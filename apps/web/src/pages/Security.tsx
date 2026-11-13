@@ -98,21 +98,25 @@ function ResultTable({
     <div className="overflow-x-auto">
       <table className="w-full min-w-[760px] border-collapse text-left text-sm">
         <thead>
-          <tr className="border-b border-white/[0.08] text-[10px] uppercase tracking-wider text-slate-500">
-            <th className="px-3 py-2 font-semibold">ID</th>
-            <th className="px-3 py-2 font-semibold">Category</th>
-            <th className="px-3 py-2 font-semibold">Scenario</th>
-            <th className="px-3 py-2 font-semibold">Expected</th>
-            <th className="px-3 py-2 font-semibold">Actual</th>
-            <th className="px-3 py-2 font-semibold">Result</th>
-            <th className="px-3 py-2" />
+          <tr className="border-b border-ink-700 text-[10px] uppercase tracking-wider text-slate-500">
+            <th scope="col" className="px-3 py-2 font-semibold">ID</th>
+            <th scope="col" className="px-3 py-2 font-semibold">Category</th>
+            <th scope="col" className="px-3 py-2 font-semibold">Scenario</th>
+            <th scope="col" className="px-3 py-2 font-semibold">Expected</th>
+            <th scope="col" className="px-3 py-2 font-semibold">Actual</th>
+            <th scope="col" className="px-3 py-2 font-semibold">Result</th>
+            {/* `relative` keeps the absolutely positioned label inside this cell,
+                so it cannot escape the table's horizontal scroll container. */}
+            <th scope="col" className="relative px-3 py-2">
+              <span className="sr-only">Details</span>
+            </th>
           </tr>
         </thead>
         <tbody>
           {results.map((result) => (
             <tr key={result.scenarioId} className="table-row">
               <td className="px-3 py-2.5">
-                <span className="chip border-white/10 bg-white/[0.04] font-mono text-[10px] text-slate-400">
+                <span className="chip border-ink-700 bg-ink-800 font-mono text-[10px] text-slate-400">
                   {result.scenarioId}
                 </span>
                 {result.control ? (
@@ -136,15 +140,15 @@ function ResultTable({
                     className={cn(
                       'chip w-fit text-[10px]',
                       result.passed
-                        ? 'border-emerald-400/25 bg-emerald-400/10 text-emerald-300'
-                        : 'border-rose-400/25 bg-rose-400/10 text-rose-300',
+                        ? 'border-green-200 bg-green-100 text-green-700'
+                        : 'border-rose-200 bg-rose-100 text-rose-600',
                     )}
                   >
                     {result.passed ? <CheckCircle2 className="h-2.5 w-2.5" /> : <XCircle className="h-2.5 w-2.5" />}
                     {result.passed ? 'PASS' : 'FAIL'}
                   </span>
                   {!result.invariantsOk ? (
-                    <span className="text-[9px] text-rose-400">invariant!</span>
+                    <span className="text-[9px] text-rose-600">invariant!</span>
                   ) : null}
                 </div>
               </td>
@@ -152,7 +156,7 @@ function ResultTable({
                 <button
                   type="button"
                   onClick={() => onSelect(result)}
-                  className="rounded p-1 text-slate-500 transition hover:bg-white/[0.05] hover:text-slate-200"
+                  className="rounded p-1 text-slate-500 transition hover:bg-ink-800 hover:text-slate-200"
                   aria-label={`Inspect ${result.scenarioId}`}
                 >
                   <ChevronRight className="h-4 w-4" />
@@ -311,14 +315,14 @@ export default function Security() {
       </div>
 
       {!enabled ? (
-        <div className="flex items-start gap-2 rounded-xl border border-amber-400/25 bg-amber-400/[0.06] p-3.5 text-xs text-amber-200">
+        <div className="flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 p-3.5 text-xs text-amber-800">
           <Lock className="mt-0.5 h-4 w-4 shrink-0" />
           <span>
             The attack suite is disabled on this deployment. Set{' '}
-            <code className="rounded bg-black/30 px-1 font-mono">HARNESS_ENABLED=true</code> and
-            keep <code className="rounded bg-black/30 px-1 font-mono">NEAR_NETWORK</code> on{' '}
-            <code className="rounded bg-black/30 px-1 font-mono">local</code> or{' '}
-            <code className="rounded bg-black/30 px-1 font-mono">testnet</code>. It never runs on
+            <code className="rounded bg-ink-800 px-1 font-mono">HARNESS_ENABLED=true</code> and
+            keep <code className="rounded bg-ink-800 px-1 font-mono">NEAR_NETWORK</code> on{' '}
+            <code className="rounded bg-ink-800 px-1 font-mono">local</code> or{' '}
+            <code className="rounded bg-ink-800 px-1 font-mono">testnet</code>. It never runs on
             mainnet.
           </span>
         </div>
@@ -359,7 +363,7 @@ export default function Security() {
         <Panel className="p-4">
           <div className="mb-2 flex items-center justify-between text-xs">
             <span className="inline-flex items-center gap-2 text-slate-300">
-              <Radar className="h-4 w-4 animate-pulse text-rose-300" /> Running attack suite against isolated clone
+              <Radar className="h-4 w-4 animate-pulse text-rose-600" /> Running attack suite against isolated clone
             </span>
             <span className="text-slate-500">
               {liveResults.length}/{liveTotal}
@@ -374,10 +378,10 @@ export default function Security() {
       ) : null}
 
       {headline ? (
-        <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-emerald-400/20 bg-emerald-400/[0.05] p-4">
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-green-200 bg-green-50 p-4">
           <div>
-            <p className="text-sm font-semibold text-emerald-200">{headline}</p>
-            <p className="mt-0.5 text-[11px] text-emerald-200/60">
+            <p className="text-sm font-semibold text-green-700">{headline}</p>
+            <p className="mt-0.5 text-[11px] text-green-700">
               {current?.status === 'ERROR' ? 'Run ended with an error.' : 'Deterministic run. No LLM was used to make decisions.'}
             </p>
           </div>
@@ -391,7 +395,7 @@ export default function Security() {
         </div>
       ) : null}
 
-      <div className="grid gap-5 xl:grid-cols-[1.7fr_1fr]">
+      <div className="grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)]">
         <Panel className="p-5">
           <SectionTitle
             title="Scenario results"
@@ -454,7 +458,7 @@ export default function Security() {
                 'Legitimate flows still settle: the control cases must pass.',
               ].map((item) => (
                 <li key={item} className="flex items-start gap-2">
-                  <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-400" />
+                  <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-green-600" />
                   {item}
                 </li>
               ))}
@@ -462,32 +466,32 @@ export default function Security() {
           </Panel>
 
           <Panel className="overflow-hidden">
-            <div className="flex items-center justify-between border-b border-white/[0.07] px-4 py-3">
+            <div className="flex items-center justify-between border-b border-ink-700 px-4 py-3">
               <span className="text-xs font-semibold text-slate-300">Run history</span>
               <Badge tone="slate">{runs.length}</Badge>
             </div>
             {runs.length === 0 ? (
               <p className="px-4 py-6 text-center text-xs text-slate-500">No runs recorded.</p>
             ) : (
-              <ul className="divide-y divide-white/[0.05]">
+              <ul className="divide-y divide-ink-700">
                 {runs.slice(0, 6).map((run) => (
                   <li key={run.id}>
                     <button
                       type="button"
                       onClick={() => setSelectedRun(run.id)}
                       className={cn(
-                        'flex w-full items-center gap-2 px-4 py-2.5 text-left transition hover:bg-white/[0.03]',
-                        current?.id === run.id && 'bg-white/[0.03]',
+                        'flex w-full items-center gap-2 px-4 py-2.5 text-left transition hover:bg-ink-850',
+                        current?.id === run.id && 'bg-ink-850',
                       )}
                     >
                       <span
                         className={cn(
                           'h-1.5 w-1.5 shrink-0 rounded-full',
                           run.status === 'DONE'
-                            ? 'bg-emerald-400'
+                            ? 'bg-green-500'
                             : run.status === 'ERROR'
-                              ? 'bg-rose-400'
-                              : 'bg-sky-400 animate-pulse',
+                              ? 'bg-rose-500'
+                              : 'bg-green-500 animate-pulse',
                         )}
                       />
                       <span className="min-w-0 flex-1">
@@ -510,18 +514,18 @@ export default function Security() {
             <SectionTitle title="Isolation" />
             <div className="space-y-2 text-[11px] leading-relaxed text-slate-500">
               <p className="flex items-start gap-2">
-                <Lock className="mt-0.5 h-3.5 w-3.5 shrink-0 text-sky-300" />
+                <Lock className="mt-0.5 h-3.5 w-3.5 shrink-0 text-green-600" />
                 Runs execute against an ephemeral vault cloned from the demo balances, never the
                 persisted vault. Receipts from the run never enter your feed.
               </p>
               <p className="flex items-start gap-2">
-                <Ban className="mt-0.5 h-3.5 w-3.5 shrink-0 text-rose-300" />
+                <Ban className="mt-0.5 h-3.5 w-3.5 shrink-0 text-rose-600" />
                 The suite is hard-blocked on mainnet. Testnet needs an owner key and a deployed
                 vault in the API environment.
               </p>
               <p className="flex items-start gap-2">
                 <Terminal className="mt-0.5 h-3.5 w-3.5 shrink-0 text-slate-400" />
-                Run it headless: <code className="rounded bg-white/[0.05] px-1 font-mono">pnpm harness --network local --quiet</code>
+                Run it headless: <code className="rounded bg-ink-800 px-1 font-mono">pnpm harness --network local --quiet</code>
               </p>
             </div>
           </Panel>
@@ -542,7 +546,7 @@ export default function Security() {
               { value: '7', label: 'control scenarios' },
               { value: '0', label: 'LLM decisions' },
             ].map((item) => (
-              <div key={item.label} className="rounded-lg border border-white/[0.07] bg-white/[0.02] p-3 text-center">
+              <div key={item.label} className="rounded-lg border border-ink-700 bg-ink-850 p-3 text-center">
                 <p className="text-lg font-semibold text-slate-100">{item.value}</p>
                 <p className="text-[10px] uppercase tracking-wider text-slate-500">{item.label}</p>
               </div>
@@ -579,11 +583,11 @@ export default function Security() {
               <p className="text-xs leading-relaxed text-slate-400">{detail.attack}</p>
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
-              <div className="rounded-lg border border-white/[0.07] bg-ink-950/60 p-3">
+              <div className="rounded-lg border border-ink-700 bg-mist p-3">
                 <p className="text-[10px] uppercase tracking-wider text-slate-500">Expected</p>
                 <p className="mono mt-1 text-xs text-slate-300">{detail.expected}</p>
               </div>
-              <div className="rounded-lg border border-white/[0.07] bg-ink-950/60 p-3">
+              <div className="rounded-lg border border-ink-700 bg-mist p-3">
                 <p className="text-[10px] uppercase tracking-wider text-slate-500">Actual</p>
                 <p className="mono mt-1 text-xs text-slate-300">{detail.actual}</p>
               </div>

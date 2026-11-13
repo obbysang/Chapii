@@ -147,6 +147,26 @@ function makeScenarios(
       display: '→ attacker.testnet',
     },
     {
+      id: 'cosign',
+      title: 'Above the co-sign threshold',
+      description: nearLimit.cosign_above
+        ? `A payment above ${human(nearLimit.cosign_above, nearLimit.asset)} ${symbolOf(nearLimit.asset)} cannot execute alone.`
+        : 'This agent has no co-sign threshold configured, so this scenario is unavailable.',
+      expectation: 'Held as PENDING_APPROVAL. Nothing moves until the owner decides.',
+      expectedLabel: 'PENDING_APPROVAL',
+      tone: 'amber',
+      icon: UserCheck,
+      body: {
+        ...base,
+        client_ref: `demo-cosign-${nonce}`,
+        asset: nearLimit.asset,
+        amount: cosign,
+        memo: 'Quarterly infra renewal',
+      },
+      display: `${human(cosign, nearLimit.asset)} ${symbolOf(nearLimit.asset)}`,
+      disabled: nearLimit.cosign_above ? undefined : 'No co-sign threshold set for this agent.',
+    },
+    {
       id: 'lookalike',
       title: 'Lookalike vendor',
       description: `One character changed from ${payee.address}. The allowlist is exact, not fuzzy.`,
@@ -180,26 +200,6 @@ function makeScenarios(
         memo: 'Enterprise annual prepay',
       },
       display: `${human(oversized, nearLimit.asset)} ${symbolOf(nearLimit.asset)}`,
-    },
-    {
-      id: 'cosign',
-      title: 'Above the co-sign threshold',
-      description: nearLimit.cosign_above
-        ? `A payment above ${human(nearLimit.cosign_above, nearLimit.asset)} ${symbolOf(nearLimit.asset)} cannot execute alone.`
-        : 'This agent has no co-sign threshold configured, so this scenario is unavailable.',
-      expectation: 'Held as PENDING_APPROVAL. Nothing moves until the owner decides.',
-      expectedLabel: 'PENDING_APPROVAL',
-      tone: 'amber',
-      icon: UserCheck,
-      body: {
-        ...base,
-        client_ref: `demo-cosign-${nonce}`,
-        asset: nearLimit.asset,
-        amount: cosign,
-        memo: 'Quarterly infra renewal',
-      },
-      display: `${human(cosign, nearLimit.asset)} ${symbolOf(nearLimit.asset)}`,
-      disabled: nearLimit.cosign_above ? undefined : 'No co-sign threshold set for this agent.',
     },
     {
       id: 'asset',
@@ -279,17 +279,17 @@ function EventLog({ events }: { events: Array<{ id: number; label: string; detai
     );
   }
   return (
-    <ul className="divide-y divide-white/[0.05]">
+    <ul className="divide-y divide-ink-700">
       {events.map((event) => (
         <li key={event.id} className="flex items-start gap-2.5 px-4 py-2.5">
           <span
             className={cn(
               'mt-1 h-1.5 w-1.5 shrink-0 rounded-full',
-              event.tone === 'green' && 'bg-emerald-400',
-              event.tone === 'red' && 'bg-rose-400',
-              event.tone === 'amber' && 'bg-amber-400',
+              event.tone === 'green' && 'bg-green-500',
+              event.tone === 'red' && 'bg-rose-500',
+              event.tone === 'amber' && 'bg-amber-500',
               (event.tone === 'blue' || event.tone === 'violet' || event.tone === 'slate') &&
-                'bg-sky-400',
+                'bg-green-500',
             )}
           />
           <div className="min-w-0 flex-1">
@@ -479,15 +479,15 @@ export default function Demo() {
 
   if (!vaultId) {
     return (
-      <div className="min-h-screen">
+      <div className="min-h-dvh">
         <PublicHeader active="demo" />
-        <div className="mx-auto max-w-2xl px-4 py-24">
+        <main className="mx-auto max-w-2xl px-4 py-24">
           <Panel className="p-8 text-center">
-            <FlaskConical className="mx-auto h-8 w-8 text-sky-300" />
+            <FlaskConical className="mx-auto h-8 w-8 text-green-600" />
             <h1 className="mt-3 text-xl font-semibold text-slate-100">Demo is warming up</h1>
             <p className="mt-2 text-sm text-slate-400">
               The API has not seeded a vault yet. Start the stack with{' '}
-              <code className="rounded bg-white/[0.06] px-1.5 py-0.5 font-mono text-xs">
+              <code className="rounded bg-ink-800 px-1.5 py-0.5 font-mono text-xs">
                 docker compose up --build
               </code>{' '}
               and refresh this page.
@@ -496,7 +496,7 @@ export default function Demo() {
               Back to landing
             </Link>
           </Panel>
-        </div>
+        </main>
       </div>
     );
   }
@@ -507,13 +507,14 @@ export default function Demo() {
   const remainingRequests = budgetQuery.data?.rate_remaining;
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-dvh">
       <PublicHeader active="demo" />
 
-      <div className="border-b border-white/[0.06] bg-white/[0.015]">
+      <main>
+      <div className="border-b border-ink-700 bg-ink-850">
         <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6">
           <div className="flex items-center gap-3">
-            <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-sky-400/20 bg-sky-400/10 text-sky-300">
+            <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-green-200 bg-green-100 text-green-600">
               <FlaskConical className="h-4.5 w-4.5" style={{ height: 18, width: 18 }} />
             </span>
             <div>
@@ -540,12 +541,12 @@ export default function Demo() {
 
       <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:py-10">
         {summary?.mode === 'near' ? (
-          <div className="mb-6 flex items-start gap-2 rounded-xl border border-amber-400/25 bg-amber-400/[0.07] p-3.5 text-xs text-amber-200">
+          <div className="mb-6 flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-100 p-3.5 text-xs text-amber-800">
             <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0" />
             <span>
               This deployment is connected to a real NEAR network. The guided demo writes requests
               through the local simulator only; switch the API to{' '}
-              <code className="rounded bg-black/30 px-1 font-mono">NEAR_NETWORK=local</code> for the
+              <code className="rounded bg-ink-800 px-1 font-mono">NEAR_NETWORK=local</code> for the
               no-secrets experience.
             </span>
           </div>
@@ -571,11 +572,11 @@ export default function Demo() {
                     className={cn(
                       'flex items-center gap-2 rounded-xl border px-3 py-2.5 text-left transition',
                       item.publicKey === agent?.publicKey
-                        ? 'border-sky-400/40 bg-sky-400/10'
-                        : 'border-white/10 bg-white/[0.02] hover:border-white/20',
+                        ? 'border-green-400 bg-green-100'
+                        : 'border-ink-700 bg-ink-850 hover:border-ink-600',
                     )}
                   >
-                    <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/[0.05] text-xs font-semibold text-slate-300">
+                    <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-ink-800 text-xs font-semibold text-slate-300">
                       {item.name.slice(0, 1).toUpperCase()}
                     </span>
                     <span>
@@ -606,6 +607,24 @@ export default function Demo() {
                     : ''}
                 </p>
               ) : null}
+              {agent && (agent.violations > 0 || agent.status === 'FROZEN') ? (
+                <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-[11px] text-amber-800">
+                  <span className="inline-flex items-center gap-1.5">
+                    <Snowflake className="h-3.5 w-3.5" />
+                    {agent.violations > 0
+                      ? `${agent.violations} violation${agent.violations === 1 ? '' : 's'} already on the counter.`
+                      : 'This agent is frozen.'}{' '}
+                    Reset the counter to run the whole tour from a clean state.
+                  </span>
+                  <Button
+                    variant="ghost"
+                    className="text-xs text-amber-800"
+                    onClick={() => void ownerAction('unfreeze')}
+                  >
+                    Reset counter
+                  </Button>
+                </div>
+              ) : null}
             </Panel>
 
             <Panel className="p-5">
@@ -626,18 +645,18 @@ export default function Demo() {
                       className={cn(
                         'group relative rounded-xl border p-3.5 text-left transition disabled:cursor-not-allowed disabled:opacity-45',
                         selected === scenario.id
-                          ? 'border-sky-400/40 bg-sky-400/[0.07]'
-                          : 'border-white/10 bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.035]',
+                          ? 'border-green-400 bg-green-100'
+                          : 'border-ink-700 bg-ink-850 hover:border-ink-600 hover:bg-ink-800',
                       )}
                     >
                       <div className="flex items-start gap-2.5">
                         <span
                           className={cn(
                             'mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg',
-                            scenario.tone === 'green' && 'bg-emerald-400/10 text-emerald-300',
-                            scenario.tone === 'red' && 'bg-rose-400/10 text-rose-300',
-                            scenario.tone === 'amber' && 'bg-amber-400/10 text-amber-300',
-                            scenario.tone === 'violet' && 'bg-violet-400/10 text-violet-300',
+                            scenario.tone === 'green' && 'bg-green-100 text-green-700',
+                            scenario.tone === 'red' && 'bg-rose-100 text-rose-600',
+                            scenario.tone === 'amber' && 'bg-amber-100 text-amber-700',
+                            scenario.tone === 'violet' && 'bg-violet-100 text-violet-600',
                           )}
                         >
                           <Icon className="h-3.5 w-3.5" />
@@ -651,7 +670,7 @@ export default function Demo() {
                         </div>
                       </div>
                       {selected === scenario.id ? (
-                        <span className="absolute right-2.5 top-2.5 h-1.5 w-1.5 rounded-full bg-sky-400" />
+                        <span className="absolute right-2.5 top-2.5 h-1.5 w-1.5 rounded-full bg-green-500" />
                       ) : null}
                     </button>
                   );
@@ -661,9 +680,9 @@ export default function Demo() {
 
             {active ? (
               <Panel className="overflow-hidden">
-                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.07] px-5 py-3.5">
+                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-ink-700 px-5 py-3.5">
                   <div className="flex items-center gap-2.5">
-                    <span className="flex h-7 w-7 items-center justify-center rounded-lg border border-white/10 bg-white/[0.03] text-slate-300">
+                    <span className="flex h-7 w-7 items-center justify-center rounded-lg border border-ink-700 bg-ink-850 text-slate-300">
                       <Terminal className="h-3.5 w-3.5" />
                     </span>
                     <div>
@@ -681,8 +700,8 @@ export default function Demo() {
                   </Button>
                 </div>
                 <div className="grid gap-0 sm:grid-cols-[1.1fr_0.9fr]">
-                  <div className="border-b border-white/[0.06] p-5 sm:border-b-0 sm:border-r">
-                    <pre className="overflow-x-auto whitespace-pre-wrap break-words rounded-lg border border-white/[0.07] bg-ink-950/70 p-3 font-mono text-[11px] leading-relaxed text-slate-300">
+                  <div className="border-b border-ink-700 p-5 sm:border-b-0 sm:border-r">
+                    <pre className="overflow-x-auto whitespace-pre-wrap break-words rounded-lg border border-ink-700 bg-mist p-3 font-mono text-[11px] leading-relaxed text-slate-300">
 {JSON.stringify(
   {
     asset: active.body.asset,
@@ -708,23 +727,23 @@ export default function Demo() {
                           className={cn(
                             'rounded-xl border p-3.5',
                             decisionTone(result.response.decision) === 'green' &&
-                              'border-emerald-400/25 bg-emerald-400/[0.07]',
+                              'border-green-200 bg-green-100',
                             decisionTone(result.response.decision) === 'amber' &&
-                              'border-amber-400/25 bg-amber-400/[0.07]',
+                              'border-amber-200 bg-amber-100',
                             decisionTone(result.response.decision) === 'red' &&
-                              'border-rose-400/25 bg-rose-500/[0.07]',
+                              'border-rose-200 bg-rose-50',
                             decisionTone(result.response.decision) === 'blue' &&
-                              'border-sky-400/25 bg-sky-400/[0.07]',
+                              'border-green-300 bg-green-100',
                           )}
                         >
                           <div className="flex items-center justify-between gap-2">
                             <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-100">
                               {decisionTone(result.response.decision) === 'green' ? (
-                                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-300" />
+                                <CheckCircle2 className="h-3.5 w-3.5 text-green-700" />
                               ) : decisionTone(result.response.decision) === 'amber' ? (
-                                <Clock3 className="h-3.5 w-3.5 text-amber-300" />
+                                <Clock3 className="h-3.5 w-3.5 text-amber-700" />
                               ) : (
-                                <Ban className="h-3.5 w-3.5 text-rose-300" />
+                                <Ban className="h-3.5 w-3.5 text-rose-600" />
                               )}
                               {result.response.decision.replaceAll('_', ' ')}
                             </span>
@@ -752,13 +771,13 @@ export default function Demo() {
                             <span>Request #{result.response.requestId}</span>
                             {tracked ? <RequestStatusBadge status={tracked.status} /> : null}
                             {tracked?.depositAddress ? (
-                              <span className="mono truncate rounded bg-white/[0.05] px-1.5 py-0.5">
+                              <span className="mono truncate rounded bg-ink-800 px-1.5 py-0.5">
                                 deposit {truncateMiddle(tracked.depositAddress, 14, 6)}
                               </span>
                             ) : null}
                             <Link
                               to={`/app/requests/${result.response.requestId}`}
-                              className="ml-auto inline-flex items-center gap-1 text-sky-300 hover:text-sky-200"
+                              className="ml-auto inline-flex items-center gap-1 text-green-600 hover:text-green-700"
                             >
                               Receipt <ChevronRight className="h-3 w-3" />
                             </Link>
@@ -777,7 +796,7 @@ export default function Demo() {
                         ) : null}
                       </div>
                     ) : (
-                      <div className="flex h-full min-h-[150px] flex-col items-center justify-center rounded-xl border border-dashed border-white/10 px-4 text-center">
+                      <div className="flex h-full min-h-[150px] flex-col items-center justify-center rounded-xl border border-dashed border-ink-700 px-4 text-center">
                         <TestTubeDiagonal className="h-5 w-5 text-slate-600" />
                         <p className="mt-2 text-xs text-slate-500">
                           Nothing has been sent yet. Run the scenario to see the contract&apos;s
@@ -788,12 +807,12 @@ export default function Demo() {
                   </div>
                 </div>
                 {flagged ? (
-                  <div className="flex flex-wrap items-center justify-between gap-2 border-t border-amber-400/20 bg-amber-400/[0.06] px-5 py-3 text-[11px] text-amber-200">
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-t border-amber-200 bg-amber-50 px-5 py-3 text-[11px] text-amber-800">
                     <span className="inline-flex items-center gap-1.5">
                       <Snowflake className="h-3.5 w-3.5" /> This agent auto-froze after repeated
                       violations. That is the policy working, not a failure.
                     </span>
-                    <Button variant="ghost" className="text-xs text-amber-200" onClick={() => void ownerAction('unfreeze')}>
+                    <Button variant="ghost" className="text-xs text-amber-800" onClick={() => void ownerAction('unfreeze')}>
                       Unfreeze as owner
                     </Button>
                   </div>
@@ -802,9 +821,9 @@ export default function Demo() {
             ) : null}
 
             <Panel className="overflow-hidden">
-              <div className="flex items-center justify-between border-b border-white/[0.07] px-4 py-3">
+              <div className="flex items-center justify-between border-b border-ink-700 px-4 py-3">
                 <span className="inline-flex items-center gap-2 text-xs font-semibold text-slate-300">
-                  <Zap className="h-3.5 w-3.5 text-sky-300" /> Live contract events
+                  <Zap className="h-3.5 w-3.5 text-green-600" /> Live contract events
                 </span>
                 <span className="text-[10px] text-slate-500">server-sent events</span>
               </div>
@@ -877,15 +896,15 @@ export default function Demo() {
                   })
                 )}
               </div>
-              <Link to="/app/agents" className="mt-4 inline-flex items-center gap-1 text-[11px] text-sky-300 hover:text-sky-200">
+              <Link to="/app/agents" className="mt-4 inline-flex items-center gap-1 text-[11px] text-green-600 hover:text-green-700">
                 Inspect agent policy <ArrowRight className="h-3 w-3" />
               </Link>
             </Panel>
 
             <Panel className="overflow-hidden">
-              <div className="flex items-center justify-between border-b border-white/[0.07] px-4 py-3">
+              <div className="flex items-center justify-between border-b border-ink-700 px-4 py-3">
                 <span className="text-xs font-semibold text-slate-300">Recent receipts</span>
-                <Link to="/app/requests" className="text-[10px] text-sky-300 hover:text-sky-200">
+                <Link to="/app/requests" className="text-[10px] text-green-600 hover:text-green-700">
                   View all
                 </Link>
               </div>
@@ -895,10 +914,10 @@ export default function Demo() {
                   <div className="skeleton h-8 w-full" />
                 </div>
               ) : requestsQuery.data?.items.length ? (
-                <ul className="divide-y divide-white/[0.05]">
+                <ul className="divide-y divide-ink-700">
                   {requestsQuery.data.items.slice(0, 5).map((request) => (
                     <li key={request.id}>
-                      <Link to={`/app/requests/${request.onchainId}`} className="flex items-center gap-2.5 px-4 py-2.5 transition hover:bg-white/[0.03]">
+                      <Link to={`/app/requests/${request.onchainId}`} className="flex items-center gap-2.5 px-4 py-2.5 transition hover:bg-ink-850">
                         <span className="min-w-0 flex-1">
                           <span className="block truncate text-xs text-slate-300">
                             {amountWithSymbol(request.amount, request.asset)} → {truncateMiddle(request.address, 10, 5)}
@@ -916,14 +935,14 @@ export default function Demo() {
             </Panel>
 
             <Panel className="overflow-hidden">
-              <div className="flex items-center justify-between border-b border-white/[0.07] px-4 py-3">
+              <div className="flex items-center justify-between border-b border-ink-700 px-4 py-3">
                 <span className="text-xs font-semibold text-slate-300">Waiting for you</span>
                 <Badge tone={(approvalsQuery.data?.items.length ?? 0) > 0 ? 'amber' : 'slate'}>
                   {approvalsQuery.data?.items.length ?? 0}
                 </Badge>
               </div>
               {approvalsQuery.data?.items.length ? (
-                <ul className="divide-y divide-white/[0.05]">
+                <ul className="divide-y divide-ink-700">
                   {approvalsQuery.data.items.slice(0, 3).map((request) => (
                     <li key={request.id} className="flex items-center gap-2 px-4 py-2.5">
                       <span className="min-w-0 flex-1">
@@ -934,7 +953,7 @@ export default function Demo() {
                           {request.agentName ?? 'agent'} → {truncateMiddle(request.address, 10, 5)}
                         </span>
                       </span>
-                      <Link to="/app/approvals" className="text-[10px] text-sky-300 hover:text-sky-200">
+                      <Link to="/app/approvals" className="text-[10px] text-green-600 hover:text-green-700">
                         Review
                       </Link>
                     </li>
@@ -949,18 +968,19 @@ export default function Demo() {
           </div>
         </div>
 
-        <div className="mt-8 rounded-xl border border-white/[0.07] bg-white/[0.02] p-4 text-[11px] leading-relaxed text-slate-500">
+        <div className="mt-8 rounded-xl border border-ink-700 bg-ink-850 p-4 text-[11px] leading-relaxed text-slate-500">
           <span className="inline-flex items-center gap-1.5 font-semibold text-slate-400">
             <Info className="h-3.5 w-3.5" /> What this demo is not
           </span>{' '}
           This page drives the offline policy engine, not a live NEAR contract. The real path is the
-          Rust contract in <code className="rounded bg-white/[0.05] px-1 font-mono">contracts/vault</code>.
+          Rust contract in <code className="rounded bg-ink-800 px-1 font-mono">contracts/vault</code>.
           Cross-chain settlement is simulated locally with deposit addresses that begin
-          <code className="mx-1 rounded bg-white/[0.05] px-1 font-mono">sim-local-</code> and cannot
+          <code className="mx-1 rounded bg-ink-800 px-1 font-mono">sim-local-</code> and cannot
           receive funds.
         </div>
       </div>
 
+      </main>
       <Footer />
     </div>
   );

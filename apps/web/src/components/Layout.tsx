@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import { Drawer } from 'vaul';
 import {
   Activity,
   BadgeCheck,
@@ -29,9 +30,9 @@ export function Logo({ size = 32, withWordmark = true }: { size?: number; withWo
       <svg width={size} height={size} viewBox="0 0 40 40" fill="none" aria-hidden="true">
         <defs>
           <linearGradient id="av-logo" x1="4" y1="2" x2="36" y2="38" gradientUnits="userSpaceOnUse">
-            <stop stopColor="#7dd3fc" />
-            <stop offset="0.55" stopColor="#60a5fa" />
-            <stop offset="1" stopColor="#a78bfa" />
+            <stop stopColor="#4ade80" />
+            <stop offset="0.55" stopColor="#22c55e" />
+            <stop offset="1" stopColor="#15803d" />
           </linearGradient>
         </defs>
         <path
@@ -47,11 +48,11 @@ export function Logo({ size = 32, withWordmark = true }: { size?: number; withWo
           strokeWidth="2.2"
           strokeLinecap="round"
         />
-        <circle cx="27.5" cy="25.5" r="2.2" fill="#34d399" />
+        <circle cx="27.5" cy="25.5" r="2.2" fill="#f97316" />
       </svg>
       {withWordmark ? (
         <span className="text-[15px] font-semibold tracking-tight text-slate-100">
-          Agent<span className="text-sky-400">Vault</span>
+          Agent<span className="text-green-600">Vault</span>
         </span>
       ) : null}
     </span>
@@ -82,15 +83,15 @@ function NavItem({
         cn(
           'group flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition',
           isActive
-            ? 'bg-sky-400/10 text-sky-200'
-            : 'text-slate-400 hover:bg-white/[0.04] hover:text-slate-200',
+            ? 'bg-green-100 text-green-700'
+            : 'text-slate-400 hover:bg-ink-800 hover:text-slate-200',
         )
       }
     >
       <span className="text-current opacity-80">{icon}</span>
       <span className="flex-1">{label}</span>
       {badge !== undefined && badge > 0 ? (
-        <span className="rounded-full border border-amber-400/30 bg-amber-400/15 px-1.5 text-[10px] font-semibold text-amber-300">
+        <span className="rounded-full border border-amber-300 bg-amber-100 px-1.5 text-[10px] font-semibold text-amber-700">
           {badge}
         </span>
       ) : null}
@@ -118,9 +119,9 @@ function VaultSwitcher() {
       <button
         type="button"
         onClick={() => setOpen((value) => !value)}
-        className="flex w-full items-center gap-2 rounded-lg border border-white/10 bg-white/[0.03] px-2.5 py-2 text-left transition hover:bg-white/[0.06]"
+        className="flex w-full items-center gap-2 rounded-lg border border-ink-700 bg-ink-850 px-2.5 py-2 text-left transition hover:bg-ink-800"
       >
-        <Vault className="h-4 w-4 shrink-0 text-sky-400" />
+        <Vault className="h-4 w-4 shrink-0 text-green-600" />
         <span className="min-w-0 flex-1">
           <span className="block truncate text-xs font-semibold text-slate-200">
             {summary?.label ?? vaultId ?? 'No vault'}
@@ -136,10 +137,10 @@ function VaultSwitcher() {
           <button
             type="button"
             aria-label="Close vault menu"
-            className="fixed inset-0 z-20 cursor-default"
+            className="fixed inset-0 z-10 cursor-default"
             onClick={() => setOpen(false)}
           />
-          <div className="absolute left-0 right-0 top-full z-30 mt-1.5 max-h-72 overflow-y-auto rounded-xl border border-white/10 bg-ink-900 p-1.5 shadow-card">
+          <div className="absolute left-0 right-0 top-full z-dropdown mt-1.5 max-h-72 overflow-y-auto rounded-xl border border-ink-700 bg-ink-900 p-1.5 shadow-card">
             {vaults.map((vault) => (
               <button
                 key={vault.vaultId}
@@ -151,14 +152,14 @@ function VaultSwitcher() {
                 className={cn(
                   'flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-xs transition',
                   vault.vaultId === vaultId
-                    ? 'bg-sky-400/10 text-sky-200'
-                    : 'text-slate-300 hover:bg-white/[0.05]',
+                    ? 'bg-green-100 text-green-700'
+                    : 'text-slate-300 hover:bg-ink-800',
                 )}
               >
                 <span
                   className={cn(
                     'h-1.5 w-1.5 shrink-0 rounded-full',
-                    vault.mode === 'local' ? 'bg-amber-400' : 'bg-emerald-400',
+                    vault.mode === 'local' ? 'bg-amber-500' : 'bg-green-500',
                   )}
                 />
                 <span className="min-w-0 flex-1">
@@ -170,7 +171,7 @@ function VaultSwitcher() {
             <NavLink
               to="/app/vaults/new"
               onClick={() => setOpen(false)}
-              className="mt-1 flex items-center gap-2 rounded-lg border border-dashed border-white/10 px-2.5 py-2 text-xs text-slate-400 transition hover:border-sky-400/30 hover:text-sky-200"
+              className="mt-1 flex items-center gap-2 rounded-lg border border-dashed border-ink-700 px-2.5 py-2 text-xs text-slate-400 transition hover:border-green-300 hover:text-green-700"
             >
               <PlusCircle className="h-3.5 w-3.5" /> Create or register a vault
             </NavLink>
@@ -185,13 +186,13 @@ function StreamIndicator() {
   const { streamStatus } = useVault();
   const tone =
     streamStatus === 'open'
-      ? 'bg-emerald-400'
+      ? 'bg-green-500'
       : streamStatus === 'connecting'
-        ? 'bg-amber-400'
-        : 'bg-rose-400';
+        ? 'bg-amber-500'
+        : 'bg-rose-500';
   return (
     <span
-      className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1 text-[11px] text-slate-400"
+      className="inline-flex items-center gap-1.5 rounded-full border border-ink-700 bg-ink-850 px-2.5 py-1 text-[11px] text-slate-400"
       title={`Server-sent events: ${streamStatus}`}
     >
       <span className={cn('h-1.5 w-1.5 rounded-full', tone, streamStatus === 'open' && 'animate-pulse')} />
@@ -238,8 +239,8 @@ function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
         </NavGroup>
       </div>
 
-      <div className="border-t border-white/[0.06] p-3">
-        <div className="flex items-center justify-between gap-2 rounded-lg bg-white/[0.02] p-2.5">
+      <div className="border-t border-ink-700 p-3">
+        <div className="flex items-center justify-between gap-2 rounded-lg bg-ink-850 p-2.5">
           <div className="min-w-0">
             <p className="text-[11px] font-semibold text-slate-300">AgentVault v1.0.0</p>
             <p className="truncate text-[10px] text-slate-500">MIT · open source</p>
@@ -276,44 +277,44 @@ export function AppShell() {
   }, [location.pathname]);
 
   return (
-    <div className="min-h-screen lg:flex">
-      <aside className="hidden w-[264px] shrink-0 border-r border-white/[0.06] bg-ink-900/60 lg:block">
-        <div className="sticky top-0 h-screen">
+    <div className="min-h-dvh lg:flex">
+      <aside className="hidden w-[264px] shrink-0 border-r border-ink-700 bg-ink-900/60 lg:block">
+        <div className="sticky top-0 h-dvh">
           <Sidebar />
         </div>
       </aside>
 
-      {mobileOpen ? (
-        <div className="fixed inset-0 z-50 flex lg:hidden">
-          <div className="h-full w-[280px] border-r border-white/10 bg-ink-900">
-            <div className="flex justify-end p-2">
-              <button
-                type="button"
-                onClick={() => setMobileOpen(false)}
-                className="rounded p-2 text-slate-400"
-                aria-label="Close menu"
-              >
-                <X className="h-5 w-5" />
-              </button>
+      <Drawer.Root open={mobileOpen} onOpenChange={setMobileOpen} direction="left">
+        <Drawer.Portal>
+          <Drawer.Overlay className="fixed inset-0 z-modal bg-black/40 backdrop-blur-sm" />
+          <Drawer.Content
+            aria-describedby={undefined}
+            className="fixed inset-y-0 left-0 z-modal flex w-[300px] outline-none"
+          >
+            <div className="h-full w-full overflow-y-auto border-r border-ink-700 bg-ink-900">
+              <div className="flex justify-end p-2">
+                <button
+                  type="button"
+                  onClick={() => setMobileOpen(false)}
+                  className="rounded p-2 text-slate-400"
+                  aria-label="Close menu"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+              <Sidebar onNavigate={() => setMobileOpen(false)} />
             </div>
-            <Sidebar onNavigate={() => setMobileOpen(false)} />
-          </div>
-          <button
-            type="button"
-            className="flex-1 bg-black/60 backdrop-blur-sm"
-            onClick={() => setMobileOpen(false)}
-            aria-label="Close menu"
-          />
-        </div>
-      ) : null}
+          </Drawer.Content>
+        </Drawer.Portal>
+      </Drawer.Root>
 
       <div className="min-w-0 flex-1">
-        <header className="sticky top-0 z-30 border-b border-white/[0.06] bg-ink-950/80 backdrop-blur-xl">
+        <header className="sticky top-0 z-sticky border-b border-ink-700 bg-ink-950/80 backdrop-blur-xl">
           <div className="flex items-center gap-3 px-4 py-3 sm:px-6">
             <button
               type="button"
               onClick={() => setMobileOpen(true)}
-              className="rounded-lg border border-white/10 p-2 text-slate-300 lg:hidden"
+              className="rounded-lg border border-ink-700 p-2 text-slate-300 lg:hidden"
               aria-label="Open menu"
             >
               <Menu className="h-4 w-4" />
@@ -326,11 +327,11 @@ export function AppShell() {
             </div>
             <div className="ml-auto flex items-center gap-2">
               {health ? (
-                <span className="hidden items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1 text-[11px] text-slate-400 md:inline-flex">
+                <span className="hidden items-center gap-1.5 rounded-full border border-ink-700 bg-ink-850 px-2.5 py-1 text-[11px] text-slate-400 md:inline-flex">
                   <span
                     className={cn(
                       'h-1.5 w-1.5 rounded-full',
-                      health.status === 'ok' ? 'bg-emerald-400' : 'bg-amber-400',
+                      health.status === 'ok' ? 'bg-green-500' : 'bg-amber-500',
                     )}
                   />
                   {health.network} · {health.mode}
@@ -341,17 +342,17 @@ export function AppShell() {
             </div>
           </div>
           {isLocal ? (
-            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 border-t border-amber-400/10 bg-amber-400/[0.05] px-4 py-1.5 text-[11px] text-amber-200/80 sm:px-6">
-              <span className="font-semibold uppercase tracking-wide text-amber-300">Simulator</span>
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 border-t border-amber-200 bg-amber-50 px-4 py-1.5 text-[11px] text-amber-800 sm:px-6">
+              <span className="font-semibold uppercase tracking-wide text-amber-700">Simulator</span>
               <span>
                 Local deterministic vault. No funds move and no real chain calls are made. Set
-                <code className="mx-1 rounded bg-black/30 px-1 py-0.5 font-mono">NEAR_NETWORK=testnet</code>
+                <code className="mx-1 rounded bg-ink-800 px-1 py-0.5 font-mono">NEAR_NETWORK=testnet</code>
                 and register a deployed contract for the real path.
               </span>
             </div>
           ) : null}
           {error ? (
-            <div className="border-t border-rose-400/20 bg-rose-500/[0.07] px-4 py-1.5 text-[11px] text-rose-200 sm:px-6">
+            <div className="border-t border-rose-200 bg-rose-50 px-4 py-1.5 text-[11px] text-rose-700 sm:px-6">
               API error: {error.message}
             </div>
           ) : null}
@@ -367,7 +368,7 @@ export function AppShell() {
 
 export function PublicHeader({ active }: { active?: 'demo' | 'console' }) {
   return (
-    <header className="sticky top-0 z-40 border-b border-white/[0.06] bg-ink-950/75 backdrop-blur-xl">
+    <header className="sticky top-0 z-sticky border-b border-ink-700 bg-ink-950/75 backdrop-blur-xl">
       <div className="mx-auto flex w-full max-w-6xl items-center gap-4 px-4 py-3.5 sm:px-6">
         <NavLink to="/">
           <Logo />

@@ -3,9 +3,9 @@
   "mode": "local",
   "network": "local",
   "vaultId": "harness-vault.testnet",
-  "startedAt": "2026-11-11T07:07:38.019Z",
-  "finishedAt": "2026-11-11T07:07:38.163Z",
-  "durationMs": 144,
+  "startedAt": "2026-11-12T22:19:03.962Z",
+  "finishedAt": "2026-11-12T22:19:04.065Z",
+  "durationMs": 103,
   "total": 34,
   "passed": 34,
   "skipped": 0,
@@ -30,7 +30,7 @@
       "invariantsOk": true,
       "notes": null,
       "txHash": null,
-      "durationMs": 86
+      "durationMs": 60
     },
     {
       "scenarioId": "P2",
@@ -45,7 +45,7 @@
       "invariantsOk": true,
       "notes": null,
       "txHash": null,
-      "durationMs": 2
+      "durationMs": 1
     },
     {
       "scenarioId": "P3",
@@ -75,7 +75,7 @@
       "invariantsOk": true,
       "notes": null,
       "txHash": null,
-      "durationMs": 3
+      "durationMs": 2
     },
     {
       "scenarioId": "P5",
@@ -90,7 +90,7 @@
       "invariantsOk": true,
       "notes": null,
       "txHash": null,
-      "durationMs": 3
+      "durationMs": 1
     },
     {
       "scenarioId": "L1",
@@ -105,7 +105,7 @@
       "invariantsOk": true,
       "notes": null,
       "txHash": null,
-      "durationMs": 3
+      "durationMs": 1
     },
     {
       "scenarioId": "L2",
@@ -120,7 +120,7 @@
       "invariantsOk": true,
       "notes": null,
       "txHash": null,
-      "durationMs": 4
+      "durationMs": 1
     },
     {
       "scenarioId": "L3",
@@ -135,7 +135,7 @@
       "invariantsOk": true,
       "notes": null,
       "txHash": null,
-      "durationMs": 3
+      "durationMs": 2
     },
     {
       "scenarioId": "L4",
@@ -165,7 +165,7 @@
       "invariantsOk": true,
       "notes": null,
       "txHash": null,
-      "durationMs": 1
+      "durationMs": 2
     },
     {
       "scenarioId": "L6",
@@ -210,7 +210,7 @@
       "invariantsOk": true,
       "notes": null,
       "txHash": null,
-      "durationMs": 2
+      "durationMs": 1
     },
     {
       "scenarioId": "R1",
@@ -225,7 +225,7 @@
       "invariantsOk": true,
       "notes": null,
       "txHash": null,
-      "durationMs": 3
+      "durationMs": 2
     },
     {
       "scenarioId": "A1",
@@ -240,7 +240,7 @@
       "invariantsOk": true,
       "notes": null,
       "txHash": null,
-      "durationMs": 2
+      "durationMs": 1
     },
     {
       "scenarioId": "A2",
@@ -270,7 +270,7 @@
       "invariantsOk": true,
       "notes": null,
       "txHash": null,
-      "durationMs": 1
+      "durationMs": 2
     },
     {
       "scenarioId": "K1",
@@ -360,7 +360,7 @@
       "invariantsOk": true,
       "notes": null,
       "txHash": null,
-      "durationMs": 1
+      "durationMs": 2
     },
     {
       "scenarioId": "K7",
@@ -420,7 +420,7 @@
       "invariantsOk": true,
       "notes": null,
       "txHash": null,
-      "durationMs": 3
+      "durationMs": 1
     },
     {
       "scenarioId": "C1",

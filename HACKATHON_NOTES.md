@@ -27,6 +27,23 @@ AgentVault is a policy-enforced treasury on NEAR: a locked vault account gives e
 
 ## Demo script (≈3 minutes)
 
+### Guided demo at `/demo` — what the judge will see
+
+The tour is deterministic. Click **Reset counter** first (the seed leaves one
+recorded violation), then run the scenarios in order:
+
+| # | Scenario | Decision | Reason code |
+|---|---|---|---|
+| 1 | Legitimate purchase | `COMPLETED` | — (the control: it must go through) |
+| 2 | Prompt-injection drain | `REJECTED` | `PAYEE_NOT_ALLOWED` |
+| 3 | Above the co-sign threshold | `PENDING_APPROVAL` | — (the owner must sign) |
+| 4 | Lookalike vendor | `REJECTED` | `PAYEE_NOT_ALLOWED` (exact address match) |
+| 5 | Oversized payout | `REJECTED` | `PER_TX_CAP_EXCEEDED` — the third violation trips the auto-freeze |
+| 6 | Unlisted asset | `REJECTED` | `AGENT_FROZEN` (the breaker is holding) |
+| 7 | Cross-chain payout | `APPROVED` → simulated settlement | `sim-local-…` deposit address, never real funds |
+
+### Spoken script
+
 1. **Landing page (0:00–0:20).** State the problem: agents with hot wallets can be drained. Show the diagram and the claim that the key can only call one method.
 2. **Console (0:20–0:50).** Open `/app`. Point out balances, the three agents, the pending co-sign, and the "local simulator" badge. Explain that the same UI runs against real NEAR.
 3. **Good payment (0:50–1:15).** Open `/demo`, send the legitimate payment. Show the green `COMPLETED` receipt and the balance change.
@@ -109,6 +126,41 @@ ONECLICK_JWT=            # optional
 ```
 
 The owner key is never configured server-side; it lives in the browser wallet.
+
+## Verified on this machine
+
+Reproduce with the commands in the README; these are the observed results.
+
+| Gate | Command | Result |
+|---|---|---|
+| Build | `pnpm build` | Pass |
+| Types | `pnpm typecheck` | Pass (9 workspaces) |
+| Unit + route tests | `pnpm test` | Pass — shared 8, localchain 5, sdk 3, mcp-server 1, api 15, web 15 |
+| Red-team harness | `pnpm harness` | 27/27 attacks contained, 7/7 controls passed, 0 invariant violations |
+| Stack | `docker compose up -d` | db + api + web healthy on :8080 / :8787 |
+| Live updates | send a payment in `/app/requests` | row appears in ~1 s over SSE |
+| Docs | `/docs/` and every footer link | 200, `text/plain` for `.md` |
+| Responsive | 13 routes at 390 / 768 / 1440 px | 0 px horizontal overflow on every route |
+| Lighthouse | `/`, `/app`, `/app/requests`, `/demo`, `/app/security`, `/app/agents`, `/app/approvals`, `/app/fund`, `/app/settings`, `/app/vaults/new` | Accessibility 1.0, Best practices 1.0, SEO 1.0, 0 console errors |
+
+Contract compilation and Rust tests run in CI and the `Dockerfile.contract`
+image; they are not runnable on a machine without a Rust toolchain.
+
+## Provisioning keys for the hosted demo
+
+The default stack needs **no secrets**. Copy `.env.example` to `.env` and fill
+only the block for the feature you use:
+
+| Block | Variables | Needed for |
+|---|---|---|
+| Core | `POSTGRES_*`, `API_PORT`, `WEB_PORT`, `NEAR_NETWORK` | Everything (safe defaults). |
+| Testnet deploy | `NEAR_ACCOUNT_ID`, `NEAR_PRIVATE_KEY`, `VAULT_ACCOUNT_ID` | `pnpm deploy:testnet`, testnet harness. |
+| Harness funder | `HARNESS_OWNER_ACCOUNT_ID`, `HARNESS_OWNER_PRIVATE_KEY` | The API-hosted "Run 34 scenarios" button on testnet. |
+| Cross-chain | `EXECUTOR_ACCOUNT_ID`, `EXECUTOR_PRIVATE_KEY`, `ONECLICK_API_URL`, `ONECLICK_JWT` | Real NEAR Intents payouts (mainnet only). |
+| LLM agent | `LLM_PROVIDER`, `LLM_BASE_URL`, `LLM_MODEL`, `LLM_API_KEY` | `pnpm agent:llm` only; the demo is deterministic and never calls an LLM. |
+
+Never commit `.env`. The owner key is not an environment variable at all: it is
+signed in the browser wallet.
 
 ## Disclosure
 

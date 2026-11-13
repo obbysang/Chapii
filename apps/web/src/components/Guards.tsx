@@ -6,12 +6,12 @@ export function ApiOffline({ message }: { message?: string }) {
   return (
     <div className="mx-auto max-w-xl py-16">
       <Panel className="p-8 text-center">
-        <ServerCrash className="mx-auto h-8 w-8 text-rose-300" />
+        <ServerCrash className="mx-auto h-8 w-8 text-rose-600" />
         <h1 className="mt-3 text-lg font-semibold text-slate-100">API unreachable</h1>
         <p className="mt-2 text-sm text-slate-400">
           {message ?? 'The browser cannot reach the AgentVault API.'}
         </p>
-        <div className="mt-5 rounded-lg border border-white/10 bg-ink-950/60 p-3 text-left">
+        <div className="mt-5 rounded-lg border border-ink-700 bg-mist p-3 text-left">
           <p className="text-[10px] uppercase tracking-wider text-slate-500">Start the stack</p>
           <pre className="mt-1 font-mono text-xs text-slate-300">docker compose up --build</pre>
           <p className="mt-2 text-[11px] text-slate-500">
@@ -27,7 +27,7 @@ export function NoVaultState() {
   return (
     <div className="mx-auto max-w-xl py-16">
       <Panel className="p-8 text-center">
-        <AlertTriangle className="mx-auto h-8 w-8 text-amber-300" />
+        <AlertTriangle className="mx-auto h-8 w-8 text-amber-700" />
         <h1 className="mt-3 text-lg font-semibold text-slate-100">No vault selected</h1>
         <p className="mt-2 text-sm text-slate-400">
           Create a local demo vault or register a deployed AgentVault contract to get started.

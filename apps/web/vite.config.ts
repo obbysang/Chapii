@@ -17,5 +17,18 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: true,
+    rollupOptions: {
+      output: {
+        // Keep the heavy NEAR SDK out of the app shell chunk so a change to a
+        // page never invalidates the wallet/runtime code in the browser cache.
+        manualChunks: {
+          react: ['react', 'react-dom', 'react-router-dom'],
+          query: ['@tanstack/react-query'],
+          near: ['near-api-js', '@near-wallet-selector/core', '@near-wallet-selector/near-wallet'],
+          ui: ['lucide-react'],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 700,
   },
 });

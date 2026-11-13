@@ -96,21 +96,21 @@ export default function Approvals() {
 
       <div className="grid gap-3 sm:grid-cols-3">
         <Panel className="flex items-center gap-3 p-4">
-          <Clock3 className="h-5 w-5 text-amber-300" />
+          <Clock3 className="h-5 w-5 text-amber-700" />
           <div>
             <p className="text-[10px] uppercase tracking-wider text-slate-500">Approval window</p>
             <p className="text-sm text-slate-200">{Math.round(APPROVAL_WINDOW_MS / 3_600_000)} hours</p>
           </div>
         </Panel>
         <Panel className="flex items-center gap-3 p-4">
-          <UserCheck className="h-5 w-5 text-sky-300" />
+          <UserCheck className="h-5 w-5 text-green-600" />
           <div>
             <p className="text-[10px] uppercase tracking-wider text-slate-500">Signer</p>
             <p className="truncate text-sm text-slate-200">{summary?.ownerId ?? 'owner'}</p>
           </div>
         </Panel>
         <Panel className="flex items-center gap-3 p-4">
-          <ShieldCheck className="h-5 w-5 text-emerald-300" />
+          <ShieldCheck className="h-5 w-5 text-green-700" />
           <div>
             <p className="text-[10px] uppercase tracking-wider text-slate-500">Mode</p>
             <p className="text-sm text-slate-200">{isLocal ? 'local simulation' : 'owner wallet'}</p>
@@ -145,7 +145,7 @@ export default function Approvals() {
             {items.map((request) => {
               const expiresAt = new Date(new Date(request.createdAt).getTime() + APPROVAL_WINDOW_MS).toISOString();
               return (
-                <div key={request.id} className="rounded-xl border border-white/[0.09] bg-white/[0.02] p-4">
+                <div key={request.id} className="rounded-xl border border-ink-700 bg-ink-850 p-4">
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-2">
@@ -202,7 +202,7 @@ export default function Approvals() {
         )}
       </Panel>
 
-      <div className="flex items-start gap-2 rounded-xl border border-sky-400/15 bg-sky-400/[0.05] p-3.5 text-[11px] leading-relaxed text-sky-200/80">
+      <div className="flex items-start gap-2 rounded-xl border border-green-200 bg-green-50 p-3.5 text-[11px] leading-relaxed text-green-700">
         <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" />
         <span>
           Approval is not a blank cheque. On approve, the contract re-validates the payee, asset,

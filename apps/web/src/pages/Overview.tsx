@@ -132,14 +132,14 @@ export default function Overview() {
         />
       </div>
 
-      <div className="grid gap-5 xl:grid-cols-[1.65fr_1fr]">
+      <div className="grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1.65fr)_minmax(0,1fr)]">
         <div className="space-y-5">
           <Panel className="p-5">
             <SectionTitle
               title="Latest receipts"
               subtitle="Every decision is stored with its reason code. Rejected requests never move funds."
               actions={
-                <Link to="/app/requests" className="text-xs text-sky-300 hover:text-sky-200">
+                <Link to="/app/requests" className="text-xs text-green-600 hover:text-green-700">
                   All requests <ArrowUpRight className="inline h-3 w-3" />
                 </Link>
               }
@@ -174,7 +174,7 @@ export default function Overview() {
               title="Guardrails in force"
               subtitle="Each agent carries its own on-chain policy. There is no vault-wide override that an agent can reach."
               actions={
-                <Link to="/app/agents" className="text-xs text-sky-300 hover:text-sky-200">
+                <Link to="/app/agents" className="text-xs text-green-600 hover:text-green-700">
                   Manage <ArrowRight className="inline h-3 w-3" />
                 </Link>
               }
@@ -191,7 +191,7 @@ export default function Overview() {
                   <Link
                     key={agent.publicKey}
                     to={`/app/agents/${encodeURIComponent(agent.publicKey)}`}
-                    className="rounded-xl border border-white/10 bg-white/[0.02] p-3.5 transition hover:border-sky-400/25 hover:bg-white/[0.04]"
+                    className="rounded-xl border border-ink-700 bg-ink-850 p-3.5 transition hover:border-green-300 hover:bg-ink-800"
                   >
                     <div className="flex items-center justify-between gap-2">
                       <p className="truncate text-sm font-medium text-slate-200">{agent.name}</p>
@@ -201,7 +201,7 @@ export default function Overview() {
                     </div>
                     <div className="mt-2 flex flex-wrap gap-1.5">
                       {agent.policy.limits.map((limit) => (
-                        <span key={limit.asset} className="chip border-white/10 bg-white/[0.04] text-slate-400">
+                        <span key={limit.asset} className="chip tabular-nums border-ink-700 bg-ink-800 text-slate-400">
                           {amount(limit.per_tx_max, limit.asset)} {symbolOf(limit.asset)}/tx
                         </span>
                       ))}
@@ -227,9 +227,9 @@ export default function Overview() {
             ) : approvalsQuery.data?.items.length ? (
               <ul className="space-y-2">
                 {approvalsQuery.data.items.slice(0, 3).map((request) => (
-                  <li key={request.id} className="rounded-lg border border-amber-400/15 bg-amber-400/[0.05] p-3">
+                  <li key={request.id} className="rounded-lg border border-amber-200 bg-amber-50 p-3">
                     <div className="flex items-center justify-between gap-2">
-                      <span className="text-xs font-medium text-slate-200">
+                      <span className="text-xs font-medium tabular-nums text-slate-200">
                         {amountWithSymbol(request.amount, request.asset)}
                       </span>
                       <RequestStatusBadge status={request.status} />
@@ -244,8 +244,8 @@ export default function Overview() {
                 </Link>
               </ul>
             ) : (
-              <div className="rounded-lg border border-white/[0.07] bg-white/[0.02] p-4 text-center">
-                <ShieldCheck className="mx-auto h-5 w-5 text-emerald-400" />
+              <div className="rounded-lg border border-ink-700 bg-ink-850 p-4 text-center">
+                <ShieldCheck className="mx-auto h-5 w-5 text-green-600" />
                 <p className="mt-1.5 text-xs text-slate-400">No pending approvals.</p>
               </div>
             )}
@@ -254,17 +254,17 @@ export default function Overview() {
           <Panel className="p-5">
             <SectionTitle title="Policy activity (24h)" />
             <div className="grid grid-cols-2 gap-2.5">
-              <div className="rounded-lg border border-emerald-400/15 bg-emerald-400/[0.05] p-3">
-                <p className="text-[10px] uppercase tracking-wider text-emerald-300/80">Approved</p>
-                <p className="mt-1 text-xl font-semibold text-emerald-200">{summary.stats24h.approved}</p>
+              <div className="rounded-lg border border-green-200 bg-green-50 p-3">
+                <p className="text-[10px] uppercase tracking-wider text-green-700">Approved</p>
+                <p className="mt-1 text-xl font-semibold text-green-700">{summary.stats24h.approved}</p>
               </div>
-              <div className="rounded-lg border border-rose-400/15 bg-rose-400/[0.05] p-3">
-                <p className="text-[10px] uppercase tracking-wider text-rose-300/80">Blocked</p>
-                <p className="mt-1 text-xl font-semibold text-rose-200">{summary.stats24h.rejected}</p>
+              <div className="rounded-lg border border-rose-400/15 bg-rose-500/[0.05] p-3">
+                <p className="text-[10px] uppercase tracking-wider text-rose-600/80">Blocked</p>
+                <p className="mt-1 text-xl font-semibold text-rose-700">{summary.stats24h.rejected}</p>
               </div>
             </div>
-            <div className="mt-3 flex items-start gap-2 rounded-lg bg-white/[0.02] p-3 text-[11px] leading-relaxed text-slate-500">
-              <Ban className="mt-0.5 h-3.5 w-3.5 shrink-0 text-rose-300" />
+            <div className="mt-3 flex items-start gap-2 rounded-lg bg-ink-850 p-3 text-[11px] leading-relaxed text-slate-500">
+              <Ban className="mt-0.5 h-3.5 w-3.5 shrink-0 text-rose-600" />
               <span>
                 Blocked requests are receipts too. They carry a reason code the agent can act on
                 without guessing.
@@ -275,7 +275,7 @@ export default function Overview() {
           <Panel className="p-5">
             <SectionTitle
               title="Red-team status"
-              actions={<Radar className="h-4 w-4 text-rose-300" />}
+              actions={<Radar className="h-4 w-4 text-rose-600" />}
             />
             <div className="flex items-baseline gap-2">
               <p className="text-2xl font-semibold text-slate-100">
@@ -331,9 +331,9 @@ export default function Overview() {
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-sky-400/15 bg-sky-400/[0.05] p-4">
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-green-200 bg-green-50 p-4">
         <div className="flex items-start gap-3">
-          <Gauge className="mt-0.5 h-5 w-5 text-sky-300" />
+          <Gauge className="mt-0.5 h-5 w-5 text-green-600" />
           <div>
             <p className="text-sm font-medium text-slate-200">Test the policy before you trust it</p>
             <p className="text-xs text-slate-500">

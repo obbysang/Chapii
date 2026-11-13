@@ -1,12 +1,22 @@
 use near_sdk::json_types::U128;
 use near_sdk::store::LookupMap;
-use near_sdk::{env, near, payable, require, AccountId, NearToken};
+// `#[payable]` is consumed by the `#[near]` macro in near-sdk 5, so it is not
+// imported from near_sdk any more.
+use near_sdk::{env, near, require, AccountId, NearToken};
 
 #[near(contract_state)]
 pub struct MockFt {
     owner_id: AccountId,
     total_supply: U128,
     balances: LookupMap<AccountId, U128>,
+}
+
+// The generated bindings read the state with `Option::<MockFt>::unwrap_or_default`,
+// so the state type needs `Default`. A token without `new` is a bug.
+impl Default for MockFt {
+    fn default() -> Self {
+        near_sdk::env::panic_str("MockFt: state is not initialized; call new first")
+    }
 }
 
 #[near]
@@ -73,11 +83,11 @@ impl MockFt {
         if new_balance == 0 {
             self.balances.remove(&sender);
         } else {
-            self.balances.insert(sender, U128(new_balance));
+            self.balances.insert(sender.clone(), U128(new_balance));
         }
         let receiver_balance = self.balances.get(&receiver_id).copied().unwrap_or(U128(0));
         self.balances
-            .insert(receiver_id, U128(receiver_balance.0 + amount.0));
+            .insert(receiver_id.clone(), U128(receiver_balance.0 + amount.0));
         near_sdk::env::log_str(&format!(
             "EVENT_JSON:{}",
             serde_json::json!({

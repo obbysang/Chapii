@@ -8,7 +8,9 @@ if (!ownerKey) {
   process.exit(0);
 }
 const VAULT = process.env.MAINNET_VAULT_ID ?? "vault.agentvault-demo.near";
-const WASM = process.env.VAULT_WASM_PATH ?? "contracts/vault/target/wasm32-unknown-unknown/release/agentvault.wasm";
+// `pnpm contract:build` exports here; the workspace target dir is
+// contracts/target, not contracts/vault/target.
+const WASM = process.env.VAULT_WASM_PATH ?? "build/contracts/vault.wasm";
 const owner = new OwnerClient({ network: "mainnet", accountId: ownerId, privateKey: ownerKey });
 console.log("target vault:", VAULT);
 const wasm = fs.readFileSync(WASM);

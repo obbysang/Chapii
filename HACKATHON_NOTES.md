@@ -135,8 +135,9 @@ Reproduce with the commands in the README; these are the observed results.
 |---|---|---|
 | Build | `pnpm build` | Pass |
 | Types | `pnpm typecheck` | Pass (9 workspaces) |
-| Unit + route tests | `pnpm test` | Pass — shared 8, localchain 5, sdk 3, mcp-server 1, api 15, web 15 |
+| Unit + route tests | `pnpm test` | Pass - 50 TS tests: shared 8, localchain 5, sdk 3, mcp-server 1, demo-agent 1, harness 2, api 15, web 15 |
 | Red-team harness | `pnpm harness` | 27/27 attacks contained, 7/7 controls passed, 0 invariant violations |
+| Contract | `pnpm contract:build` (Rust 1.95 in Docker) | 21 unit tests pass, `vault.wasm` + `mock_ft.wasm` produced |
 | Stack | `docker compose up -d` | db + api + web healthy on :8080 / :8787 |
 | Live updates | send a payment in `/app/requests` | row appears in ~1 s over SSE |
 | Docs | `/docs/` and every footer link | 200, `text/plain` for `.md` |

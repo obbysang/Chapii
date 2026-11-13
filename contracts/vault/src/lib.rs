@@ -9,7 +9,7 @@ use events::emit;
 use near_sdk::json_types::U128;
 use near_sdk::store::{IterableMap, LookupMap};
 use near_sdk::{
-    env, near, AccountId, Allowance, Gas, NearToken, Promise, PromiseResult, PublicKey,
+    env, near, AccountId, Allowance, Gas, NearToken, Promise, PublicKey,
 };
 use policy::{
     bump_rate, bump_violation, canonicalize_policy, evaluate, evaluate_approval, normalize_args,
@@ -35,6 +35,15 @@ pub struct Vault {
     change_seq: u64,
     /// seq -> request id; serves the incremental indexer feed.
     change_log: IterableMap<u64, u64>,
+}
+
+// The generated bindings read the state with `Option::<Vault>::unwrap_or_default`,
+// so the state type needs `Default`. A vault without `new` is a bug, not a fresh
+// vault: fail loudly instead of silently starting with an empty owner.
+impl Default for Vault {
+    fn default() -> Self {
+        near_sdk::env::panic_str("AgentVault: state is not initialized; call new first")
+    }
 }
 
 #[near]
@@ -137,7 +146,8 @@ impl Vault {
                     .expect("allowance must be > 0"),
                 env::current_account_id(),
                 "request_payment".to_string(),
-            );
+            )
+            .detach();
         emit(
             "agent_allowance_set",
             serde_json::json!({"public_key": public_key, "allowance_yocto": allowance_yocto}),
@@ -169,7 +179,9 @@ impl Vault {
         let mut agent = self.get_agent_or_panic(&public_key);
         agent.status = AgentStatus::Revoked;
         self.agents.insert(public_key.clone(), agent);
-        Promise::new(env::current_account_id()).delete_key(public_key.clone());
+        Promise::new(env::current_account_id())
+            .delete_key(public_key.clone())
+            .detach();
         emit("agent_revoked", serde_json::json!({"public_key": public_key}));
     }
 
@@ -342,7 +354,9 @@ impl Vault {
             amount.0 <= env::account_balance().as_yoctonear().saturating_sub(self.storage_reserve()),
             "insufficient spendable balance"
         );
-        Promise::new(to.clone()).transfer(NearToken::from_yoctonear(amount.0));
+        Promise::new(to.clone())
+            .transfer(NearToken::from_yoctonear(amount.0))
+            .detach();
         emit(
             "withdrawal",
             serde_json::json!({"asset": "NEAR", "amount": amount, "to": to}),
@@ -352,14 +366,16 @@ impl Vault {
     pub fn withdraw_ft(&mut self, token: AccountId, amount: U128, to: AccountId) {
         self.assert_owner();
         assert!(amount.0 > 0, "amount must be > 0");
-        Promise::new(token.clone()).function_call(
-            "ft_transfer".to_string(),
-            serde_json::json!({"receiver_id": &to, "amount": U128(amount.0)})
-                .to_string()
-                .into_bytes(),
-            NearToken::from_yoctonear(1),
-            GAS_FOR_FT_TRANSFER,
-        );
+        Promise::new(token.clone())
+            .function_call(
+                "ft_transfer".to_string(),
+                serde_json::json!({"receiver_id": &to, "amount": U128(amount.0)})
+                    .to_string()
+                    .into_bytes(),
+                NearToken::from_yoctonear(1),
+                GAS_FOR_FT_TRANSFER,
+            )
+            .detach();
         emit(
             "withdrawal",
             serde_json::json!({"asset": format!("ft:{}", token), "amount": amount, "to": to}),
@@ -632,7 +648,8 @@ impl Vault {
                 .into_bytes(),
             NearToken::from_yoctonear(0),
             GAS_FOR_CALLBACK,
-        ));
+        ))
+        .detach();
     }
 
     pub fn report_crosschain_result(
@@ -715,7 +732,9 @@ impl Vault {
         if request.status != RequestStatus::Approved {
             return;
         }
-        let ok = matches!(env::promise_result(0), PromiseResult::Successful(_));
+        // Transfers return no data, so the size bound is only there to stop an
+        // unbounded register read. Anything else counts as a failed transfer.
+        let ok = env::promise_result_checked(0, 1024).is_ok();
         request.decided_ns = Some(env::block_timestamp());
         if ok {
             request.status = RequestStatus::Completed;
@@ -750,7 +769,7 @@ impl Vault {
         if request.status != RequestStatus::Executing {
             return;
         }
-        let ok = matches!(env::promise_result(0), PromiseResult::Successful(_));
+        let ok = env::promise_result_checked(0, 1024).is_ok();
         if ok {
             emit(
                 "crosschain_funded",
@@ -956,13 +975,15 @@ impl Vault {
     }
 
     fn add_key(&self, public_key: &PublicKey, allowance: u128) {
-        Promise::new(env::current_account_id()).add_access_key_allowance(
-            public_key.clone(),
-            Allowance::limited(NearToken::from_yoctonear(allowance))
-                .expect("allowance must be > 0"),
-            env::current_account_id(),
-            "request_payment".to_string(),
-        );
+        Promise::new(env::current_account_id())
+            .add_access_key_allowance(
+                public_key.clone(),
+                Allowance::limited(NearToken::from_yoctonear(allowance))
+                    .expect("allowance must be > 0"),
+                env::current_account_id(),
+                "request_payment".to_string(),
+            )
+            .detach();
     }
 
     fn storage_reserve(&self) -> u128 {
@@ -1011,7 +1032,8 @@ impl Vault {
                     .unwrap_or_else(|_| env::panic_str("invalid NEAR payee address"));
                 Promise::new(to)
                     .transfer(NearToken::from_yoctonear(request.amount.0))
-                    .then(callback);
+                    .then(callback)
+                    .detach();
             }
             Asset::Ft(token) => {
                 let to = AccountId::try_from(request.address.clone())
@@ -1029,7 +1051,8 @@ impl Vault {
                         NearToken::from_yoctonear(1),
                         GAS_FOR_FT_TRANSFER,
                     )
-                    .then(callback);
+                    .then(callback)
+                    .detach();
             }
         }
     }

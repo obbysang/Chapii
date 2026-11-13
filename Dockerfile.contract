@@ -1,7 +1,16 @@
 # Builds and tests the AgentVault contracts, then exports the WASM artifacts.
 # Usage:
 #   docker build -f Dockerfile.contract --target export --output type=local,dest=build/contracts .
-FROM rust:1.86-slim AS builder
+#
+# The Rust version must satisfy the MSRV of the resolved dependency tree
+# (near-sdk 5.30 -> rustc 1.95). Bump this tag when near-sdk is bumped.
+FROM rust:1.95-slim AS builder
+# Keep the build inside a modest memory budget: near-sdk with the
+# unit-testing feature is expensive to compile.
+ENV CARGO_BUILD_JOBS=1 \
+    CARGO_PROFILE_DEV_DEBUG=0 \
+    CARGO_PROFILE_TEST_DEBUG=0 \
+    CARGO_PROFILE_RELEASE_DEBUG=0
 RUN apt-get update \
     && apt-get install -y --no-install-recommends build-essential pkg-config libssl-dev \
     && rm -rf /var/lib/apt/lists/*

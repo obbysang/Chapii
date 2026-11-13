@@ -325,7 +325,8 @@ fn failed_transfer_rolls_back_usage() {
         callback_ctx,
         near_sdk::test_vm_config(),
         near_sdk::RuntimeFeesConfig::test(),
-        std::collections::HashMap::<near_sdk::AccountId, near_sdk::NearToken>::default(),
+        // near-sdk 5 keys validator balances by account id string.
+        std::collections::HashMap::<String, near_sdk::NearToken>::default(),
         vec![near_sdk::PromiseResult::Failed],
     );
     vault.on_payment_resolved(id);

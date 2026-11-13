@@ -62,6 +62,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      # near-sdk 5.30 requires rustc >= 1.95; `stable` tracks that.
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: wasm32-unknown-unknown
@@ -69,9 +70,9 @@ jobs:
         with:
           workspaces: contracts
       - name: cargo test
-        run: cargo test --manifest-path contracts/Cargo.toml
+        run: cargo test --manifest-path contracts/Cargo.toml --locked
       - name: wasm release build
-        run: cargo build --manifest-path contracts/Cargo.toml --target wasm32-unknown-unknown --release
+        run: cargo build --manifest-path contracts/Cargo.toml --target wasm32-unknown-unknown --release --locked
       - name: Collect artifacts
         run: |
           mkdir -p build/contracts

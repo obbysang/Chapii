@@ -1,4 +1,4 @@
-use near_sdk::borsh::{BorshDeserialize, BorshSerialize};
+use borsh::{BorshDeserialize, BorshSerialize};
 use near_sdk::json_types::U128;
 use near_sdk::serde::{Deserialize, Deserializer, Serialize, Serializer};
 use near_sdk::{AccountId, PublicKey};
@@ -39,7 +39,8 @@ impl Serialize for Asset {
 
 impl<'de> Deserialize<'de> for Asset {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let raw = String::deserialize(deserializer)?;
+        // Both borsh and serde expose `deserialize` for String, so name the trait.
+        let raw = <String as Deserialize>::deserialize(deserializer)?;
         Asset::parse(&raw).ok_or_else(|| {
             near_sdk::serde::de::Error::custom("asset must be \"NEAR\" or \"ft:<account_id>\"")
         })

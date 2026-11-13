@@ -7,8 +7,11 @@ Legend: `[x]` verified in this repo, `[ ]` human action still required.
 
 ## Definition of done (§14)
 
-- [x] Contract passes unit tests; K1–K5 proved on testnet that the agent key can
-      do only `request_payment`.
+- [x] Contract passes unit tests (21) and builds to wasm.
+- [ ] K1–K5 proved on a real testnet account (the agent key can do only
+      `request_payment`) → **human**: needs a funded testnet account
+      (`NEAR_*` block in `.env.example`). They pass today in the local
+      simulator, which enforces the same key restriction in software.
 - [x] `pnpm demo` and `pnpm harness` work from this repo — **27/27 attacks
       contained, 7/7 controls passed, 0 invariant violations**.
 - [x] One-command demo: `docker compose up --build`, then open
@@ -34,16 +37,21 @@ Legend: `[x]` verified in this repo, `[ ]` human action still required.
 |---|---|---|
 | Build | `pnpm build` | Pass |
 | Types | `pnpm typecheck` | Pass (9 workspaces) |
-| Tests | `pnpm test` | shared 8, localchain 5, sdk 3, mcp-server 1, api 15, web 15 |
+| Tests | `pnpm test` | 50 TS tests: shared 8, localchain 5, sdk 3, mcp-server 1, demo-agent 1, harness 2, api 15, web 15 |
 | Harness | `pnpm harness` | 27/27 attacks, 7/7 controls, 0 invariant violations |
+| Contract | `pnpm contract:build` (Rust 1.95 in Docker) | 21 unit tests pass; `vault.wasm` + `mock_ft.wasm` exported |
 | Stack | `docker compose up -d` | db + api + web healthy |
 | Live updates | send a payment in `/app/requests` | appears in ~1 s over SSE |
 | Docs | `/docs/` + every footer link | 200; `.md` served as `text/plain` |
 | Responsive | 13 routes at 390 / 768 / 1440 px | 0 px horizontal overflow |
 | Lighthouse | 10 routes (landing, console, ledger, demo, security, agents, approvals, fund, settings, new vault) | 1.0 / 1.0 / 1.0, 0 console errors |
 
-Contract compilation and Rust tests run in CI and the `Dockerfile.contract`
-image; they need a Rust toolchain and are not run on this host.
+Contract compilation and Rust tests run in the `Dockerfile.contract` image
+(`pnpm contract:build`, rustc 1.95 pinned) and in CI. This host has no Rust
+toolchain, so the numbers above were produced by running the image's own steps
+(`cargo test`, then the wasm release build) inside `rust:1.95-slim` with
+`-j1`; the full `docker build` needs more than this 8 GB host can give the
+Docker VM.
 
 ## HACKATHON.md requirements
 
